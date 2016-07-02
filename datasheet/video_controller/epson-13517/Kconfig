@@ -1,0 +1,43 @@
+#
+# Video configuration
+#
+
+menu "Epson S1D13517 Support"
+
+config FB_EPSON_S1D13517
+    tristate "S1D13517 Support"
+    depends on FB
+    select FB_CFB_FILLRECT
+    select FB_CFB_COPYAREA
+    select FB_CFB_IMAGEBLIT
+    ---help---
+      This enables support for Epson S1D13517 controller.
+
+config FB_EPSON_PCMCIA
+    bool "EPSON PCMCIA Support"
+    depends on FB_EPSON_S1D13517 && PCMCIA
+    ---help---
+      This enables support for Epson PCMCIA evaluation boards
+ 
+config FB_EPSON_PROC
+    bool "Create /proc device files"
+    depends on FB_EPSON_S1D13517
+    ---help---
+      This is for debugging. This adds /proc files.
+
+config FB_EPSON_DEBUG_PRINTK
+    bool "Enable printk() debugging text."
+    depends on FB_EPSON_S1D13517
+    ---help---
+      This enables printk() function in video driver.
+      This function writes text to kernel log file when video driver
+      functions are called. Note that printk() functions which display
+      error messages are never disabled.
+
+config FB_EPSON_SHOW_SETTINGS
+    bool "Display configuration settings while compiling"
+    depends on FB_EPSON_S1D13517
+    ---help---
+      At compile time, this shows video configuration settings as warning messages.
+
+endmenu
