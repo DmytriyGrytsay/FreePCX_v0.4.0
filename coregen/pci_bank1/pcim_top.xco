@@ -1,0 +1,54 @@
+##############################################################
+#
+# Xilinx Core Generator version 14.7
+# Date: Sun Mar 13 22:54:43 2016
+#
+##############################################################
+#
+#  This file contains the customisation parameters for a
+#  Xilinx CORE Generator IP GUI. It is strongly recommended
+#  that you do not manually alter this file as it may cause
+#  unexpected and unsupported behavior.
+#
+##############################################################
+#
+#  Generated from component: xilinx.com:ip:pciucfgen:2.8
+#
+##############################################################
+#
+# BEGIN Project Options
+SET addpads = false
+SET asysymbol = true
+SET busformat = BusFormatAngleBracketNotRipped
+SET createndf = false
+SET designentry = VHDL
+SET device = xc3sd3400a
+SET devicefamily = spartan3adsp
+SET flowvendor = Other
+SET formalverification = false
+SET foundationsym = false
+SET implementationfiletype = Ngc
+SET package = fg676
+SET removerpms = false
+SET simulationfiles = Behavioral
+SET speedgrade = -5
+SET verilogsim = false
+SET vhdlsim = true
+# END Project Options
+# BEGIN Select
+SELECT UCF_Generator_for_PCI/PCI-X family Xilinx,_Inc. 2.8
+# END Select
+# BEGIN Parameters
+CSET clk_type=GLOBAL
+CSET component_name=pcim_top
+CSET h_position=1
+CSET ip_name=PCI
+CSET ip_type=pci_32bit_33mhz_s3ad
+CSET ip_version=v3.1
+CSET v_position=0
+# END Parameters
+# BEGIN Extra information
+MISC pkg_timestamp=2013-10-13T18:46:09Z
+# END Extra information
+GENERATE
+# CRC: 6b963d1e

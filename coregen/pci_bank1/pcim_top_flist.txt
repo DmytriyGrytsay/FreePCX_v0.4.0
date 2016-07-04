@@ -1,0 +1,8 @@
+# Output products list for <pcim_top>
+pcim_top.xco
+pcim_top\pcim_top.ucf
+pcim_top\pciucfgen_readme.txt
+pcim_top_flist.txt
+pcim_top_xmdf.tcl
+pciucfgen.log
+ucfgen_tcl.log
