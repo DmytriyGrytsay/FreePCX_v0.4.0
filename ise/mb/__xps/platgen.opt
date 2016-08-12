@@ -1,0 +1,2 @@
+ -p xc3sd3400afg676-5 -lang vhdl$(PROJECT_SEARCHPATHOPT) $(GLOBAL_SEARCHPATHOPT) -toplevel no -ti mb_i -msg __xps/ise/xmsgprops.lst
+xps_ll_temac_0 Boughtxps_ll_temac_1 Boughtplbv46_pci_0 Bought

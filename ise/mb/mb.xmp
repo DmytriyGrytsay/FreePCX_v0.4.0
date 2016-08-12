@@ -1,0 +1,35 @@
+#Please do not modify this file by hand
+XmpVersion: 14.7
+VerMgmt: 14.7
+IntStyle: ise
+Flow: ise
+ModuleSearchPath: /home/kruger/EDK/ip-cores_repository/pcores/xps_sd_if_net_v1_00_a/../../../
+ModuleSearchPath: D:/EDK
+MHS File: mb.mhs
+Architecture: spartan3adsp
+Device: xc3sd3400a
+Package: fg676
+SpeedGrade: -5
+UserCmd1: 
+UserCmd1Type: 0
+UserCmd2: 
+UserCmd2Type: 0
+GenSimTB: 0
+SdkExportBmmBit: 1
+SdkExportDir: SDK/SDK_Export
+InsertNoPads: 1
+WarnForEAArch: 1
+HdlLang: vhdl
+SimModel: BEHAVIORAL
+ExternalMemSim: 0
+UcfFile: data/mb.ucf
+EnableParTimingError: 1
+ShowLicenseDialog: 1
+BInfo: 
+LockAddr: xps_sd_if_net_0,C_BASEADDR
+LockAddr: plbv46_pci_0,C_IPIFBAR_1
+LockAddr: plbv46_pci_0,C_IPIFBAR_0
+LockAddr: opb_ac97_controller_ref_0,C_BASEADDR
+Processor: microblaze_0
+ElfImp: 
+ElfSim: 

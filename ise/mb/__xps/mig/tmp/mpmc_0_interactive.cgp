@@ -1,0 +1,14 @@
+SET_FLAG MODE interactive
+SET_FLAG STANDALONE_MODE TRUE
+SET_PREFERENCE flowvendor foundation_ise
+SET_PREFERENCE speedgrade -5
+SET_PREFERENCE workingdirectory D:/FreePCX_v0.4.0/ise/mb/__xps/mig/tmp
+SET_PREFERENCE subworkingdirectory D:/FreePCX_v0.4.0/ise/mb/__xps/mig/gui
+SET_PREFERENCE outputdirectory D:/FreePCX_v0.4.0/ise/mb/__xps/mig/tmp
+SET_PREFERENCE device xc3sd3400a
+SET_PREFERENCE package fg676
+SET_PREFERENCE designentry verilog
+SET_PREFERENCE devicefamily spartan3adsp
+SET_PARAMETER component_name mpmc_0
+SET_PARAMETER xml_input_file
+

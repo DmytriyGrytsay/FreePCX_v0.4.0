@@ -1,0 +1,1 @@
+ -p spartan3adsp -lang vhdl$(PROJECT_SEARCHPATHOPT) $(GLOBAL_SEARCHPATHOPT) -msg __xps/ise/xmsgprops.lst -s isim -X D:/FreePCX_v0.4.0/ise/mb/

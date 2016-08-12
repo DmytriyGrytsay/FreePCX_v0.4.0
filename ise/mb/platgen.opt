@@ -1,0 +1,17 @@
+-p
+xc3sd3400afg676-5
+-lang
+vhdl
+-intstyle
+ise
+-lp
+/home/kruger/EDK/
+-toplevel
+no
+-ti
+mb_i
+-msg
+__xps/ise/xmsgprops.lst
+-parallel
+yes
+mb.mhs

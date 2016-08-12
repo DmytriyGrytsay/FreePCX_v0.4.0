@@ -1,0 +1,198 @@
+P-CAD Net List Load Errors
+
+======================================================================
+
+Netlist filename: D:\FreePCX_v0.4.0\lib_schematic_pcb\freepcx_v0.4.net
+Warning: Net NOR_DQ0 has less than two nodes.
+Warning: Net NOR_DQ1 has less than two nodes.
+Warning: Net NOR_DQ2 has less than two nodes.
+Warning: Net NOR_DQ3 has less than two nodes.
+Warning: Net NOR_DQ4 has less than two nodes.
+Warning: Net NOR_DQ5 has less than two nodes.
+Warning: Net NOR_DQ6 has less than two nodes.
+Warning: Net NOR_DQ7 has less than two nodes.
+Warning: Net NOR_DQ8 has less than two nodes.
+Warning: Net NOR_DQ9 has less than two nodes.
+Warning: Net NOR_DQ10 has less than two nodes.
+Warning: Net NOR_DQ11 has less than two nodes.
+Warning: Net NOR_DQ12 has less than two nodes.
+Warning: Net NOR_DQ13 has less than two nodes.
+Warning: Net NOR_DQ14 has less than two nodes.
+Warning: Net NOR_DQ15 has less than two nodes.
+Warning: Net NOR_A0 has less than two nodes.
+Warning: Net NOR_A1 has less than two nodes.
+Warning: Net NOR_A2 has less than two nodes.
+Warning: Net NOR_A3 has less than two nodes.
+Warning: Net NOR_A4 has less than two nodes.
+Warning: Net NOR_A5 has less than two nodes.
+Warning: Net NOR_A6 has less than two nodes.
+Warning: Net NOR_A7 has less than two nodes.
+Warning: Net NOR_A8 has less than two nodes.
+Warning: Net NOR_A9 has less than two nodes.
+Warning: Net NOR_A10 has less than two nodes.
+Warning: Net NOR_A11 has less than two nodes.
+Warning: Net NOR_A12 has less than two nodes.
+Warning: Net NOR_A13 has less than two nodes.
+Warning: Net NOR_A14 has less than two nodes.
+Warning: Net NOR_A15 has less than two nodes.
+Warning: Net NOR_A16 has less than two nodes.
+Warning: Net NOR_A17 has less than two nodes.
+Warning: Net NOR_A18 has less than two nodes.
+Warning: Net NOR_A19 has less than two nodes.
+Warning: Net NOR_A20 has less than two nodes.
+Warning: Net NOR_A21 has less than two nodes.
+Warning: Net NOR_A22 has less than two nodes.
+Warning: Net NOR_A23 has less than two nodes.
+Warning: Net NOR_A24 has less than two nodes.
+Warning: Net NOR_A25 has less than two nodes.
+Warning: Net NOR_A26 has less than two nodes.
+Warning: Net NOR_OE has less than two nodes.
+Warning: Net NOR_CE has less than two nodes.
+Warning: Net NOR_WE has less than two nodes.
+Warning: Net NOR_RESET has less than two nodes.
+Warning: Net VIDEO_DATA0 has less than two nodes.
+Warning: Net VIDEO_DATA1 has less than two nodes.
+Warning: Net VIDEO_DATA3 has less than two nodes.
+Warning: Net VIDEO_DATA2 has less than two nodes.
+Warning: Net VIDEO_DATA4 has less than two nodes.
+Warning: Net VIDEO_DATA5 has less than two nodes.
+Warning: Net VIDEO_DATA6 has less than two nodes.
+Warning: Net VIDEO_DATA7 has less than two nodes.
+Warning: Net VIDEO_DATA8 has less than two nodes.
+Warning: Net VIDEO_DATA9 has less than two nodes.
+
+----------------------------------------------------------------------
+
+25-Jul-16  10:50                                            Page    1
+
+P-CAD Net List Load Errors
+
+======================================================================
+
+Warning: Net VIDEO_DATA10 has less than two nodes.
+Warning: Net VIDEO_DATA11 has less than two nodes.
+Warning: Net VIDEO_DATA12 has less than two nodes.
+Warning: Net VIDEO_DATA13 has less than two nodes.
+Warning: Net VIDEO_DATA14 has less than two nodes.
+Warning: Net VIDEO_DATA15 has less than two nodes.
+Warning: Net VIDEO_CS has less than two nodes.
+Warning: Net VIDEO_RD has less than two nodes.
+Warning: Net VIDEO_WR has less than two nodes.
+Warning: Net VIDEO_RESET has less than two nodes.
+Warning: Net VIDEO_INT has less than two nodes.
+Warning: Net VIDEO_HALE has less than two nodes.
+Warning: Net VIDEO_A1 has less than two nodes.
+Warning: Net USB_D0 has less than two nodes.
+Warning: Net USB_D1 has less than two nodes.
+Warning: Net USB_D2 has less than two nodes.
+Warning: Net USB_D3 has less than two nodes.
+Warning: Net USB_D4 has less than two nodes.
+Warning: Net USB_D5 has less than two nodes.
+Warning: Net USB_D6 has less than two nodes.
+Warning: Net USB_D7 has less than two nodes.
+Warning: Net USB_D8 has less than two nodes.
+Warning: Net USB_D9 has less than two nodes.
+Warning: Net USB_D10 has less than two nodes.
+Warning: Net USB_D11 has less than two nodes.
+Warning: Net USB_D12 has less than two nodes.
+Warning: Net USB_D13 has less than two nodes.
+Warning: Net USB_D14 has less than two nodes.
+Warning: Net USB_D15 has less than two nodes.
+Warning: Net USB_A0 has less than two nodes.
+Warning: Net USB_A1 has less than two nodes.
+Warning: Net USB_INT has less than two nodes.
+Warning: Net USB_NRD has less than two nodes.
+Warning: Net USB_NWR has less than two nodes.
+Warning: Net USB_NCS has less than two nodes.
+Warning: Net ETHER1_RESET has less than two nodes.
+Warning: Net ETHER1_RX_CLK has less than two nodes.
+Warning: Net ETHER1_CRS has less than two nodes.
+Warning: Net ETHER1_TXD0 has less than two nodes.
+Warning: Net ETHER1_TXD1 has less than two nodes.
+Warning: Net ETHER1_TXD2 has less than two nodes.
+Warning: Net ETHER1_TXD3 has less than two nodes.
+Warning: Net ETHER1_TX_ER has less than two nodes.
+Warning: Net ETHER1_TX_EN has less than two nodes.
+Warning: Net ETHER1_TX_CLK has less than two nodes.
+Warning: Net ETHER1_GTX_CLK has less than two nodes.
+Warning: Net ETHER1_MDC has less than two nodes.
+Warning: Net ETHER2_RESET has less than two nodes.
+Warning: Net ETHER2_RX_ER has less than two nodes.
+Warning: Net ETHER2_RX_DV has less than two nodes.
+Warning: Net ETHER2_RX_CLK has less than two nodes.
+Warning: Net ETHER2_CRS has less than two nodes.
+Warning: Net ETHER2_COL has less than two nodes.
+Warning: Net ETHER2_TXD0 has less than two nodes.
+Warning: Net ETHER2_TXD1 has less than two nodes.
+Warning: Net ETHER2_TXD2 has less than two nodes.
+Warning: Net ETHER2_TXD3 has less than two nodes.
+
+----------------------------------------------------------------------
+
+25-Jul-16  10:50                                            Page    2
+
+P-CAD Net List Load Errors
+
+======================================================================
+
+Warning: Net ETHER2_TX_ER has less than two nodes.
+Warning: Net ETHER2_TX_EN has less than two nodes.
+Warning: Net ETHER2_TX_CLK has less than two nodes.
+Warning: Net ETHER2_GTX_CLK has less than two nodes.
+Warning: Net ETHER2_MDC has less than two nodes.
+Warning: Net MMC_CLK has less than two nodes.
+Warning: Net MMC_CD has less than two nodes.
+Warning: Net AUDIO_CLK has less than two nodes.
+Warning: Net AUDIO_SIN has less than two nodes.
+Warning: Net AUDIO_RESET has less than two nodes.
+Warning: Net UART_TX1 has less than two nodes.
+Warning: Net UART_TX2 has less than two nodes.
+Warning: Net UART_RX1 has less than two nodes.
+Warning: Net UART_RX2 has less than two nodes.
+Warning: Net UART16550_RIN has less than two nodes.
+Warning: Net UART16550_SOUT has less than two nodes.
+Warning: Net UART16550_DTRN has less than two nodes.
+Warning: Net UART16550_RTSN has less than two nodes.
+Warning: Net UART16550_SIN has less than two nodes.
+Warning: Net UART16550_CTSN has less than two nodes.
+Warning: Net UART16550_DCDN has less than two nodes.
+Warning: Net UART16550_DSRN has less than two nodes.
+Warning: Net CP2101_TXD has less than two nodes.
+Warning: Net CP2101_RXD has less than two nodes.
+Warning: Net FPGA_83MHZ has less than two nodes.
+Warning: Net SPI_MISO has less than two nodes.
+Warning: Net SPI_CLK has less than two nodes.
+Warning: Net SPI_MOSI has less than two nodes.
+Warning: Net MAX7301_DOUT has less than two nodes.
+Warning: Net MAX7301_DIN has less than two nodes.
+Warning: Net MAX7301_SCLK has less than two nodes.
+Warning: Net GPIO_BTN1 has less than two nodes.
+Warning: Net GPIO_BTN2 has less than two nodes.
+Warning: Net GPIO_BTN3 has less than two nodes.
+Warning: Net GPIO_BTN4 has less than two nodes.
+SHORTED NETS:
+
+
+Net List Errors:   0
+Net List Warnings: 149
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------
+
+25-Jul-16  10:50                                            Page    3
+
