@@ -1,5 +1,5 @@
 // This file has been automatically generated.  Do not modify.
-// Command Line Options: -family spartan3a -enable_ecc 0 -tRAS 40000 -part_data_width 16 -cas_latency 3 -cas_wr_latency 5 -memory_burst_length 4 -tRC 55000 -tRCD 15000 -nDQSS 1 -tWR 15000 -tRP 15000 -tRRD 10000 -tRFC 127500 -nAL 0 -nCCD 2 -tWTR 7500 -tRTP 7500 -nZQCS 64 -c 6667 -reg 0 -m DDR2 -d 32 -f_txt /home/kruger/FreePCX_v0.4.0/ise/mb/__xps/mpmc_0_ctrl_path_table.txt -f_err /home/kruger/FreePCX_v0.4.0/ise/mb/__xps/mpmc_0_ctrl_path_generation_errors.txt -f_ver /home/kruger/FreePCX_v0.4.0/ise/mb/__xps/mpmc_0_ctrl_path_params.v -static_phy 0 -wr_mem_pipeline 1
+// Command Line Options: -family spartan3a -enable_ecc 0 -tRAS 40000 -part_data_width 16 -cas_latency 3 -cas_wr_latency 5 -memory_burst_length 4 -tRC 55000 -tRCD 15000 -nDQSS 1 -tWR 15000 -tRP 15000 -tRRD 10000 -tRFC 127500 -nAL 0 -nCCD 2 -tWTR 7500 -tRTP 7500 -nZQCS 64 -c 6667 -reg 0 -m DDR2 -d 32 -f_txt D:/ise/mb/__xps/mpmc_0_ctrl_path_table.txt -f_err D:/ise/mb/__xps/mpmc_0_ctrl_path_generation_errors.txt -f_ver D:/ise/mb/__xps/mpmc_0_ctrl_path_params.v -static_phy 0 -wr_mem_pipeline 1
 //
 // Timing Parameters:
 // Memory Clock Period (ps): 6667 

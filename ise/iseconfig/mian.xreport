@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2016-08-12T16:47:10</DateModified>
+  <DateModified>2016-10-14T15:23:51</DateModified>
   <ModuleName>mian</ModuleName>
-  <SummaryTimeStamp>2016-06-08T23:20:27</SummaryTimeStamp>
+  <SummaryTimeStamp>2016-10-01T20:16:09</SummaryTimeStamp>
   <SavedFilePath>D:/FreePCX_v0.4.0/ise/iseconfig/mian.xreport</SavedFilePath>
   <ImplementationReportsDirectory>D:/FreePCX_v0.4.0/ise\</ImplementationReportsDirectory>
   <DateInitialized>2016-04-24T15:08:15</DateInitialized>
-  <EnableMessageFiltering>false</EnableMessageFiltering>
+  <EnableMessageFiltering>true</EnableMessageFiltering>
   <XMP_File>D:/FreePCX_v0.4.0/ise/mb/mb.xmp</XMP_File>
  </header>
  <body>

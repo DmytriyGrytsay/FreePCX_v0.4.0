@@ -115,9 +115,18 @@ implementation/mb_opb_ac97_controller_ref_0_wrapper.ngc \
 implementation/mb_xps_spi_0_wrapper.ngc \
 implementation/mb_xps_iic_0_wrapper.ngc \
 implementation/mb_xps_uartlite_0_wrapper.ngc \
-implementation/mb_xps_uart16550_0_wrapper.ngc \
+implementation/mb_xps_mch_emc_0d_wrapper.ngc \
+implementation/mb_xps_epc_0_wrapper.ngc \
+implementation/mb_util_bus_split_0_wrapper.ngc \
+implementation/mb_xps_epc_1_wrapper.ngc \
+implementation/mb_util_bus_split_1_wrapper.ngc \
+implementation/mb_xps_sysace_0_wrapper.ngc \
 implementation/mb_xps_uartlite_1_wrapper.ngc \
-implementation/mb_xps_uartlite_2_wrapper.ngc
+implementation/mb_xps_uartlite_2_wrapper.ngc \
+implementation/mb_xps_uart16550_0_wrapper.ngc \
+implementation/mb_xps_spi_1_wrapper.ngc \
+implementation/mb_xps_gpio_0_wrapper.ngc \
+implementation/mb_fle_tonegen_0_wrapper.ngc
 
 POSTSYN_NETLIST = implementation/$(SYSTEM).ngc
 

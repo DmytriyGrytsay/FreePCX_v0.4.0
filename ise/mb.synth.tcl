@@ -1,5 +1,5 @@
 proc pnsynth {} {
-  cd /home/kruger/FreePCX_v0.4.0/ise/mb
+  cd D:/ise/mb
   if { [ catch { xload xmp mb.xmp } result ] } {
     exit 10
   }

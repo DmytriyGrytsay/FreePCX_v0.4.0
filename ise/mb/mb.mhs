@@ -75,8 +75,8 @@
  PORT plbv46_pci_0_PERR_N = plbv46_pci_0_PERR_N, DIR = IO
  PORT plbv46_pci_0_SERR_N = plbv46_pci_0_SERR_N, DIR = IO
  PORT plbv46_pci_0_PCLK_pin = plbv46_pci_0_PCLK, DIR = I, SIGIS = CLK
- PORT pci_arb_req_n_pin = pci_arb_req_n, DIR = I, SIGIS = NONE, VEC = [1:3]
- PORT pci_arb_gnt_n_pin = pci_arb_gnt_n, DIR = O, SIGIS = NONE, VEC = [1:3]
+ PORT pci_arb_req_n_pin = pci_arb_req_n, DIR = I, SIGIS = NONE, VEC = [1:4]
+ PORT pci_arb_gnt_n_pin = pci_arb_gnt_n, DIR = O, SIGIS = NONE, VEC = [1:4]
  PORT opb_ac97_controller_ref_0_Sync_pin = opb_ac97_controller_ref_0_Sync, DIR = O
  PORT opb_ac97_controller_ref_0_SData_Out_pin = opb_ac97_controller_ref_0_SData_Out, DIR = O
  PORT opb_ac97_controller_ref_0_SData_In_pin = opb_ac97_controller_ref_0_SData_In, DIR = I
@@ -89,18 +89,53 @@
  PORT xps_spi_0_SCK = xps_spi_0_SCK, DIR = IO
  PORT xps_iic_0_Scl = xps_iic_0_Scl, DIR = IO
  PORT xps_iic_0_Sda = xps_iic_0_Sda, DIR = IO
+ PORT xps_mch_emc_0d_Mem_DQ_pin = xps_mch_emc_0d_Mem_DQ, DIR = IO, VEC = [0:15]
+ PORT xps_mch_emc_0d_Mem_A_pin = xps_mch_emc_0d_Mem_A, DIR = O, VEC = [3:29]
+ PORT xps_mch_emc_0d_Mem_OEN_pin = xps_mch_emc_0d_Mem_OEN, DIR = O, VEC = [0:0]
+ PORT xps_mch_emc_0d_Mem_RPN_pin = xps_mch_emc_0d_Mem_RPN, DIR = O
+ PORT xps_mch_emc_0d_Mem_WEN_pin = xps_mch_emc_0d_Mem_WEN, DIR = O
+ PORT xps_mch_emc_0d_Mem_CEN_pin = xps_mch_emc_0d_Mem_CEN, DIR = O, VEC = [0:0]
+ PORT xps_epc_0_PRH_Rd_n_pin = xps_epc_0_PRH_Rd_n, DIR = O
+ PORT xps_epc_0_PRH_Wr_n_pin = xps_epc_0_PRH_Wr_n, DIR = O
+ PORT xps_epc_0_PRH_Data = xps_epc_0_PRH_Data, DIR = IO, VEC = [0:15]
+ PORT xps_epc_0_PRH_CS_n_pin = xps_epc_0_PRH_CS_n, DIR = O, VEC = [0:0]
+ PORT util_bus_split_0_Out1_pin = util_bus_split_0_Out1, DIR = O, VEC = [0:1]
+ PORT usb_int = usb_int_ExternalPort_0, DIR = I, SIGIS = INTERRUPT, SENSITIVITY = LEVEL_HIGH
+ PORT xps_epc_1_PRH_Data_pin = xps_epc_1_PRH_Data, DIR = IO, VEC = [0:15]
+ PORT xps_epc_1_PRH_Rd_n_pin = xps_epc_1_PRH_Rd_n, DIR = O
+ PORT xps_epc_1_PRH_Wr_n_pin = xps_epc_1_PRH_Wr_n, DIR = O
+ PORT xps_epc_1_PRH_CS_n_pin = xps_epc_1_PRH_CS_n, DIR = O
+ PORT util_bus_split_1_Out1_pin = util_bus_split_1_Out1, DIR = O, VEC = [0:1]
+ PORT xps_sysace_0_SysACE_MPA_pin = xps_sysace_0_SysACE_MPA, DIR = O, VEC = [6:0]
+ PORT xps_sysace_0_SysACE_MPD_pin = xps_sysace_0_SysACE_MPD, DIR = IO, VEC = [15:0]
+ PORT xps_sysace_0_SysACE_CLK_pin = net_xps_sysace_0_SysACE_CLK_pin, DIR = I
+ PORT xps_sysace_0_SysACE_MPIRQ_pin = net_xps_sysace_0_SysACE_MPIRQ_pin, DIR = I
+ PORT xps_sysace_0_SysACE_OEN_pin = xps_sysace_0_SysACE_OEN, DIR = O
+ PORT xps_sysace_0_SysACE_WEN_pin = xps_sysace_0_SysACE_WEN, DIR = O
+ PORT xps_sysace_0_SysACE_CEN_pin = xps_sysace_0_SysACE_CEN, DIR = O
  PORT xps_uartlite_1_RX_pin = xps_uartlite_1_RX, DIR = I
  PORT xps_uartlite_1_TX_pin = xps_uartlite_1_TX, DIR = O
  PORT xps_uartlite_2_RX_pin = xps_uartlite_2_RX, DIR = I
  PORT xps_uartlite_2_TX_pin = xps_uartlite_2_TX, DIR = O
- PORT xps_uart16550_0_dcdN_pin = xps_uart16550_0_dcdN, DIR = I
+ PORT xps_spi_1_SS = xps_spi_1_SS, DIR = IO, VEC = [0:0]
+ PORT xps_spi_1_SCK = xps_spi_1_SCK, DIR = IO
+ PORT xps_spi_1_MISO = xps_spi_1_MISO, DIR = IO
+ PORT xps_spi_1_MOSI = xps_spi_1_MOSI, DIR = IO
+ PORT xps_gpio_0_GPIO2_IO_I_pin = xps_gpio_0_GPIO2_IO_I, DIR = I, VEC = [0:5]
+ PORT xps_gpio_0_GPIO_IO_pin = xps_gpio_0_GPIO_IO, DIR = IO, VEC = [0:3]
  PORT xps_uart16550_0_ctsN_pin = xps_uart16550_0_ctsN, DIR = I
- PORT xps_uart16550_0_rtsN_pin = xps_uart16550_0_rtsN, DIR = O
- PORT xps_uart16550_0_dsrN_pin = xps_uart16550_0_dsrN, DIR = I
+ PORT xps_uart16550_0_dcdN_pin = net_xps_uart16550_0_dcdN_pin, DIR = I
  PORT xps_uart16550_0_dtrN_pin = xps_uart16550_0_dtrN, DIR = O
- PORT xps_uart16550_0_riN_pin = xps_uart16550_0_riN, DIR = I
+ PORT xps_uart16550_0_dsrN_pin = net_xps_uart16550_0_dsrN_pin, DIR = I
+ PORT xps_uart16550_0_rtsN_pin = xps_uart16550_0_rtsN, DIR = O
+ PORT xps_uart16550_0_riN_pin = net_xps_uart16550_0_riN_pin, DIR = I
  PORT xps_uart16550_0_sin_pin = xps_uart16550_0_sin, DIR = I
  PORT xps_uart16550_0_sout_pin = xps_uart16550_0_sout, DIR = O
+ PORT fle_tonegen_0_BuzzerOUT_pin = BuzzerOUT, DIR = O
+ PORT PCI_INTA_N = PCI_INTA_N_net, DIR = I, SIGIS = INTERRUPT, SENSITIVITY = LEVEL_LOW, INTERRUPT_PRIORITY = MEDIUM
+ PORT PCI_INTB_N = PCI_INTB_N_net, DIR = I, SIGIS = INTERRUPT, SENSITIVITY = LEVEL_LOW, INTERRUPT_PRIORITY = MEDIUM
+ PORT PCI_INTC_N = PCI_INTC_N_net, DIR = I, SIGIS = INTERRUPT, SENSITIVITY = LEVEL_LOW, INTERRUPT_PRIORITY = MEDIUM
+ PORT PCI_INTD_N = PCI_INTD_N_net, DIR = I, SIGIS = INTERRUPT, SENSITIVITY = LEVEL_LOW, INTERRUPT_PRIORITY = MEDIUM
 
 
 BEGIN microblaze
@@ -124,24 +159,24 @@ BEGIN microblaze
  PARAMETER C_OPCODE_0x0_ILLEGAL = 1
  PARAMETER C_UNALIGNED_EXCEPTIONS = 1
  PARAMETER C_USE_DIV = 1
- PARAMETER C_ICACHE_BASEADDR = 0x60000000
- PARAMETER C_DCACHE_BASEADDR = 0x60000000
+ PARAMETER C_ICACHE_BASEADDR = 0xe0000000
+ PARAMETER C_DCACHE_BASEADDR = 0xe0000000
  PARAMETER C_USE_FPU = 2
  PARAMETER C_USE_HW_MUL = 2
+ PARAMETER C_FSL_LINKS = 0
  PARAMETER C_USE_MSR_INSTR = 1
  PARAMETER C_USE_PCMP_INSTR = 1
  PARAMETER C_NUMBER_OF_PC_BRK = 1
  PARAMETER C_USE_MMU = 3
  PARAMETER C_MMU_ZONES = 2
- PARAMETER C_ICACHE_HIGHADDR = 0x7fffffff
- PARAMETER C_DCACHE_HIGHADDR = 0x7fffffff
+ PARAMETER C_ICACHE_HIGHADDR = 0xffffffff
+ PARAMETER C_DCACHE_HIGHADDR = 0xffffffff
  PARAMETER C_ICACHE_STREAMS = 1
  PARAMETER C_ICACHE_VICTIMS = 8
  PARAMETER C_PVR = 2
  PARAMETER C_DIV_ZERO_EXCEPTION = 1
  PARAMETER C_DCACHE_VICTIMS = 8
- PARAMETER C_FSL_LINKS = 0
- PARAMETER C_FPU_EXCEPTION = 1
+ PARAMETER C_FPU_EXCEPTION = 0
  PARAMETER C_MMU_DTLB_SIZE = 4
  PARAMETER C_MMU_ITLB_SIZE = 2
  BUS_INTERFACE DPLB = mb_plb
@@ -254,7 +289,7 @@ BEGIN xps_intc
  PARAMETER C_BASEADDR = 0x81800000
  PARAMETER C_HIGHADDR = 0x8180ffff
  BUS_INTERFACE SPLB = mb_plb
- PORT Intr = xps_uart16550_0_IP2INTC_Irpt & xps_ps2_0_IP2INTC_Irpt_2 & xps_ps2_0_IP2INTC_Irpt_1 & xps_sd_if_net_0_IP2INTC_Irpt & xps_ll_temac_1_TemacIntc0_Irpt & xps_ll_temac_0_TemacIntc0_Irpt & xps_timer_0_Interrupt & mpmc_0_SDMA2_Tx_IntOut & mpmc_0_SDMA2_Rx_IntOut & mpmc_0_SDMA3_Tx_IntOut & mpmc_0_SDMA3_Rx_IntOut & plbv46_pci_0_IP2INTC_Irpt & xps_timebase_wdt_0_Timebase_Interrupt & xps_timebase_wdt_0_WDT_Interrupt & opb_ac97_controller_ref_0_Playback_Interrupt & opb_ac97_controller_ref_0_Record_Interrupt & xps_uartlite_0_Interrupt & xps_iic_0_IIC2INTC_Irpt & xps_spi_0_IP2INTC_Irpt & xps_uartlite_1_Interrupt & xps_uartlite_2_Interrupt
+ PORT Intr = xps_ps2_0_IP2INTC_Irpt_2 & xps_ps2_0_IP2INTC_Irpt_1 & xps_sd_if_net_0_IP2INTC_Irpt & xps_ll_temac_1_TemacIntc0_Irpt & xps_ll_temac_0_TemacIntc0_Irpt & xps_timer_0_Interrupt & mpmc_0_SDMA2_Tx_IntOut & mpmc_0_SDMA2_Rx_IntOut & mpmc_0_SDMA3_Tx_IntOut & mpmc_0_SDMA3_Rx_IntOut & plbv46_pci_0_IP2INTC_Irpt & xps_timebase_wdt_0_Timebase_Interrupt & xps_timebase_wdt_0_WDT_Interrupt & opb_ac97_controller_ref_0_Playback_Interrupt & opb_ac97_controller_ref_0_Record_Interrupt & xps_uartlite_0_Interrupt & xps_iic_0_IIC2INTC_Irpt & xps_spi_0_IP2INTC_Irpt & usb_int_ExternalPort_0 & xps_sysace_0_SysACE_IRQ & xps_gpio_0_IP2INTC_Irpt & xps_spi_1_IP2INTC_Irpt & xps_uart16550_0_IP2INTC_Irpt & xps_uartlite_2_Interrupt & xps_uartlite_1_Interrupt & PCI_INTA_N_net & PCI_INTB_N_net & PCI_INTC_N_net & PCI_INTD_N_net
  PORT Irq = microblaze_0_Interrupt
 END
 
@@ -296,11 +331,10 @@ BEGIN mpmc
  PARAMETER C_PIM3_BASETYPE = 3
  PARAMETER C_PIM4_BASETYPE = 2
  PARAMETER C_SPLB4_NATIVE_DWIDTH = 64
- PARAMETER C_MPMC_CLK0_PERIOD_PS = 6667
- PARAMETER C_MPMC_BASEADDR = 0x60000000
- PARAMETER C_MPMC_HIGHADDR = 0x7FFFFFFF
+ PARAMETER C_MPMC_BASEADDR = 0xe0000000
+ PARAMETER C_MPMC_HIGHADDR = 0xffffffff
  PARAMETER C_SDMA_CTRL_BASEADDR = 0x84600000
- PARAMETER C_SDMA_CTRL_HIGHADDR = 0x8460FFFF
+ PARAMETER C_SDMA_CTRL_HIGHADDR = 0x8460ffff
  BUS_INTERFACE XCL0 = microblaze_0_IXCL
  BUS_INTERFACE XCL0_B = microblaze_0_DXCL
  BUS_INTERFACE SPLB1 = plb_v46_0
@@ -381,8 +415,8 @@ BEGIN xps_ll_temac
  PARAMETER C_TEMAC_TYPE = 2
  PARAMETER C_BUS2CORE_CLK_RATIO = 1
  PARAMETER C_PHY_TYPE = 0
- PARAMETER C_TEMAC0_TXFIFO = 2048
- PARAMETER C_TEMAC0_RXFIFO = 2048
+ PARAMETER C_TEMAC0_TXFIFO = 16384
+ PARAMETER C_TEMAC0_RXFIFO = 16384
  PARAMETER C_TEMAC0_TXCSUM = 1
  PARAMETER C_TEMAC0_RXCSUM = 1
  PARAMETER C_BASEADDR = 0x87100000
@@ -412,8 +446,8 @@ BEGIN xps_ll_temac
  PARAMETER C_TEMAC_TYPE = 2
  PARAMETER C_BUS2CORE_CLK_RATIO = 1
  PARAMETER C_PHY_TYPE = 0
- PARAMETER C_TEMAC0_TXFIFO = 2048
- PARAMETER C_TEMAC0_RXFIFO = 2048
+ PARAMETER C_TEMAC0_TXFIFO = 16384
+ PARAMETER C_TEMAC0_RXFIFO = 16384
  PARAMETER C_BASEADDR = 0x87000000
  PARAMETER C_HIGHADDR = 0x8707ffff
  PARAMETER C_TEMAC0_TXCSUM = 1
@@ -487,14 +521,11 @@ BEGIN plbv46_pci
  PORT IRDY_N = plbv46_pci_0_IRDY_N
  PORT STOP_N = plbv46_pci_0_STOP_N
  PORT DEVSEL_N = plbv46_pci_0_DEVSEL_N
- PORT INTR_A = plbv46_pci_0_INTR_A
  PORT PERR_N = plbv46_pci_0_PERR_N
  PORT SERR_N = plbv46_pci_0_SERR_N
- PORT REQ_N = plbv46_pci_0_REQ_N
  PORT GNT_N = pci_arbiter_0_PCI_Gnt_n
  PORT RST_N = net_vcc
  PORT PCLK = plbv46_pci_0_PCLK
- PORT INTR_A_int = plbv46_pci_0_INTR_A_int
  PORT REQ_N_toArb = plbv46_pci_0_REQ_N_toArb
  PORT FRAME_I = plbv46_pci_0_FRAME_I
  PORT IRDY_I = plbv46_pci_0_IRDY_I
@@ -503,9 +534,9 @@ END
 BEGIN pci_arbiter
  PARAMETER INSTANCE = pci_arbiter_0
  PARAMETER HW_VER = 1.00.a
- PARAMETER C_NUM_PCI_MSTRS = 4
+ PARAMETER C_NUM_PCI_MSTRS = 5
  PORT PCI_Gnt_n = pci_arbiter_0_PCI_Gnt_n & pci_arb_gnt_n
- PORT PCI_Req_n = plbv46_pci_0_REQ_N & pci_arb_req_n
+ PORT PCI_Req_n = plbv46_pci_0_REQ_N_toArb & pci_arb_req_n
  PORT PCI_Frame_n = plbv46_pci_0_FRAME_I
  PORT PCI_Irdy_n = plbv46_pci_0_IRDY_I
  PORT PCI_Clk = plbv46_pci_0_PCLK
@@ -525,9 +556,11 @@ END
 BEGIN plbv46_opb_bridge
  PARAMETER INSTANCE = plbv46_opb_bridge_0
  PARAMETER HW_VER = 1.01.a
- PARAMETER C_NUM_ADDR_RNG = 1
- PARAMETER C_RNG0_BASEADDR = 0x81000000
- PARAMETER C_RNG0_HIGHADDR = 0x810001ff
+ PARAMETER C_NUM_ADDR_RNG = 2
+ PARAMETER C_RNG0_BASEADDR = 0x7fc00000
+ PARAMETER C_RNG0_HIGHADDR = 0x7fc0ffff
+ PARAMETER C_RNG1_BASEADDR = 0x81000000
+ PARAMETER C_RNG1_HIGHADDR = 0x810001ff
  BUS_INTERFACE SPLB = mb_plb
  BUS_INTERFACE MOPB = opb_v20_0
 END
@@ -557,8 +590,8 @@ BEGIN xps_spi
  PARAMETER INSTANCE = xps_spi_0
  PARAMETER HW_VER = 2.02.a
  PARAMETER C_SCK_RATIO = 2
- PARAMETER C_BASEADDR = 0x83400000
- PARAMETER C_HIGHADDR = 0x8340ffff
+ PARAMETER C_BASEADDR = 0x83420000
+ PARAMETER C_HIGHADDR = 0x8342ffff
  BUS_INTERFACE SPLB = mb_plb
  PORT IP2INTC_Irpt = xps_spi_0_IP2INTC_Irpt
  PORT MISO = xps_spi_0_MISO
@@ -592,27 +625,141 @@ BEGIN xps_uartlite
  PORT Interrupt = xps_uartlite_0_Interrupt
 END
 
-BEGIN xps_uart16550
- PARAMETER INSTANCE = xps_uart16550_0
- PARAMETER HW_VER = 3.00.a
- PARAMETER C_BASEADDR = 0x83e00000
- PARAMETER C_HIGHADDR = 0x83e0ffff
+BEGIN xps_mch_emc
+ PARAMETER INSTANCE = xps_mch_emc_0d
+ PARAMETER HW_VER = 3.01.a
+ PARAMETER C_NUM_CHANNELS = 0
+ PARAMETER C_MAX_MEM_WIDTH = 16
+ PARAMETER C_MEM0_WIDTH = 16
+ PARAMETER C_INCLUDE_DATAWIDTH_MATCHING_0 = 1
+ PARAMETER C_TLZWE_PS_MEM_0 = 10000
+ PARAMETER C_MEM0_BASEADDR = 0x50000000
+ PARAMETER C_MEM0_HIGHADDR = 0x5fffffff
  BUS_INTERFACE SPLB = mb_plb
- PORT IP2INTC_Irpt = xps_uart16550_0_IP2INTC_Irpt
- PORT dcdN = xps_uart16550_0_dcdN
- PORT ctsN = xps_uart16550_0_ctsN
- PORT rtsN = xps_uart16550_0_rtsN
- PORT dsrN = xps_uart16550_0_dsrN
- PORT dtrN = xps_uart16550_0_dtrN
- PORT riN = xps_uart16550_0_riN
- PORT sin = xps_uart16550_0_sin
- PORT sout = xps_uart16550_0_sout
+ PORT RdClk = clk_75_0000MHz
+ PORT Mem_DQ = xps_mch_emc_0d_Mem_DQ
+ PORT Mem_A = 0b000 & xps_mch_emc_0d_Mem_A & 0b00
+ PORT Mem_OEN = xps_mch_emc_0d_Mem_OEN
+ PORT Mem_RPN = xps_mch_emc_0d_Mem_RPN
+ PORT Mem_WEN = xps_mch_emc_0d_Mem_WEN
+ PORT Mem_CEN = xps_mch_emc_0d_Mem_CEN
+END
+
+BEGIN xps_epc
+ PARAMETER INSTANCE = xps_epc_0
+ PARAMETER HW_VER = 1.02.a
+ PARAMETER C_PRH_MAX_AWIDTH = 4
+ PARAMETER C_PRH_MAX_DWIDTH = 16
+ PARAMETER C_PRH_MAX_ADWIDTH = 16
+ PARAMETER C_PRH0_AWIDTH = 4
+ PARAMETER C_PRH0_DWIDTH = 16
+ PARAMETER C_PRH0_DWIDTH_MATCH = 1
+ PARAMETER C_PRH0_SYNC = 0
+ PARAMETER C_PRH0_BUS_MULTIPLEX = 0
+ PARAMETER C_PRH0_ADDR_TSU = 6000
+ PARAMETER C_PRH0_ADDR_TH = 6000
+ PARAMETER C_PRH0_CSN_TSU = 6000
+ PARAMETER C_PRH0_CSN_TH = 6000
+ PARAMETER C_PRH0_WRN_WIDTH = 15000
+ PARAMETER C_PRH0_WR_CYCLE = 30000
+ PARAMETER C_PRH0_DATA_TSU = 10000
+ PARAMETER C_PRH0_DATA_TH = 5000
+ PARAMETER C_PRH0_RDN_WIDTH = 30000
+ PARAMETER C_PRH0_RD_CYCLE = 150000
+ PARAMETER C_PRH0_DATA_TOUT = 5000
+ PARAMETER C_PRH0_DATA_TINV = 10000
+ PARAMETER C_PRH0_RDY_TOUT = 10000
+ PARAMETER C_PRH0_RDY_WIDTH = 500000
+ PARAMETER C_PRH_CLK_PERIOD_PS = 13333
+ PARAMETER C_PRH0_BASEADDR = 0x80800000
+ PARAMETER C_PRH0_HIGHADDR = 0x8080ffff
+ BUS_INTERFACE SPLB = mb_plb
+ PORT PRH_Rdy = net_vcc
+ PORT PRH_Clk = net_vcc
+ PORT PRH_Rd_n = xps_epc_0_PRH_Rd_n
+ PORT PRH_Wr_n = xps_epc_0_PRH_Wr_n
+ PORT PRH_Data = xps_epc_0_PRH_Data
+ PORT PRH_CS_n = xps_epc_0_PRH_CS_n
+ PORT PRH_Addr = xps_epc_0_PRH_Addr
+END
+
+BEGIN util_bus_split
+ PARAMETER INSTANCE = util_bus_split_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_SIZE_IN = 4
+ PARAMETER C_SPLIT = 2
+ PORT Sig = xps_epc_0_PRH_Addr
+ PORT Out1 = util_bus_split_0_Out1
+END
+
+BEGIN xps_epc
+ PARAMETER INSTANCE = xps_epc_1
+ PARAMETER HW_VER = 1.02.a
+ PARAMETER C_PRH_MAX_AWIDTH = 4
+ PARAMETER C_PRH_MAX_DWIDTH = 16
+ PARAMETER C_PRH_MAX_ADWIDTH = 16
+ PARAMETER C_PRH0_AWIDTH = 4
+ PARAMETER C_PRH0_DWIDTH = 16
+ PARAMETER C_PRH0_DWIDTH_MATCH = 1
+ PARAMETER C_PRH0_SYNC = 0
+ PARAMETER C_PRH0_BUS_MULTIPLEX = 0
+ PARAMETER C_PRH0_ADDR_TSU = 1000
+ PARAMETER C_PRH0_ADDR_TH = 5000
+ PARAMETER C_PRH0_CSN_TSU = 6000
+ PARAMETER C_PRH0_CSN_TH = 6000
+ PARAMETER C_PRH0_WRN_WIDTH = 15000
+ PARAMETER C_PRH0_WR_CYCLE = 40000
+ PARAMETER C_PRH0_DATA_TSU = 3000
+ PARAMETER C_PRH0_DATA_TH = 5000
+ PARAMETER C_PRH0_RDN_WIDTH = 30000
+ PARAMETER C_PRH0_RD_CYCLE = 150000
+ PARAMETER C_PRH0_DATA_TOUT = 5000
+ PARAMETER C_PRH0_DATA_TINV = 10000
+ PARAMETER C_PRH0_RDY_TOUT = 10000
+ PARAMETER C_PRH0_RDY_WIDTH = 500000
+ PARAMETER C_PRH_CLK_PERIOD_PS = 13333
+ PARAMETER C_PRH0_BASEADDR = 0x80840000
+ PARAMETER C_PRH0_HIGHADDR = 0x8084ffff
+ BUS_INTERFACE SPLB = mb_plb
+ PORT PRH_Rdy = net_vcc
+ PORT PRH_Clk = net_vcc
+ PORT PRH_Data = xps_epc_1_PRH_Data
+ PORT PRH_Rd_n = xps_epc_1_PRH_Rd_n
+ PORT PRH_Wr_n = xps_epc_1_PRH_Wr_n
+ PORT PRH_CS_n = xps_epc_1_PRH_CS_n
+ PORT PRH_Addr = xps_epc_1_PRH_Addr
+END
+
+BEGIN util_bus_split
+ PARAMETER INSTANCE = util_bus_split_1
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_SIZE_IN = 4
+ PARAMETER C_SPLIT = 2
+ PORT Sig = xps_epc_1_PRH_Addr
+ PORT Out1 = util_bus_split_1_Out1
+END
+
+BEGIN xps_sysace
+ PARAMETER INSTANCE = xps_sysace_0
+ PARAMETER HW_VER = 1.01.a
+ PARAMETER C_BASEADDR = 0x83600000
+ PARAMETER C_HIGHADDR = 0x8360ffff
+ BUS_INTERFACE SPLB = mb_plb
+ PORT SysACE_IRQ = xps_sysace_0_SysACE_IRQ
+ PORT SysACE_MPA = xps_sysace_0_SysACE_MPA
+ PORT SysACE_MPD = xps_sysace_0_SysACE_MPD
+ PORT SysACE_CLK = net_xps_sysace_0_SysACE_CLK_pin
+ PORT SysACE_MPIRQ = net_xps_sysace_0_SysACE_MPIRQ_pin
+ PORT SysACE_OEN = xps_sysace_0_SysACE_OEN
+ PORT SysACE_WEN = xps_sysace_0_SysACE_WEN
+ PORT SysACE_CEN = xps_sysace_0_SysACE_CEN
 END
 
 BEGIN xps_uartlite
  PARAMETER INSTANCE = xps_uartlite_1
  PARAMETER HW_VER = 1.02.a
  PARAMETER C_BAUDRATE = 115200
+ PARAMETER C_USE_PARITY = 0
  PARAMETER C_BASEADDR = 0x84020000
  PARAMETER C_HIGHADDR = 0x8402ffff
  BUS_INTERFACE SPLB = mb_plb
@@ -632,5 +779,60 @@ BEGIN xps_uartlite
  PORT Interrupt = xps_uartlite_2_Interrupt
  PORT RX = xps_uartlite_2_RX
  PORT TX = xps_uartlite_2_TX
+END
+
+BEGIN xps_uart16550
+ PARAMETER INSTANCE = xps_uart16550_0
+ PARAMETER HW_VER = 3.00.a
+ PARAMETER C_BASEADDR = 0x83e00000
+ PARAMETER C_HIGHADDR = 0x83e0ffff
+ BUS_INTERFACE SPLB = mb_plb
+ PORT IP2INTC_Irpt = xps_uart16550_0_IP2INTC_Irpt
+ PORT ctsN = xps_uart16550_0_ctsN
+ PORT dcdN = net_xps_uart16550_0_dcdN_pin
+ PORT dtrN = xps_uart16550_0_dtrN
+ PORT dsrN = net_xps_uart16550_0_dsrN_pin
+ PORT rtsN = xps_uart16550_0_rtsN
+ PORT riN = net_xps_uart16550_0_riN_pin
+ PORT sin = xps_uart16550_0_sin
+ PORT sout = xps_uart16550_0_sout
+END
+
+BEGIN xps_spi
+ PARAMETER INSTANCE = xps_spi_1
+ PARAMETER HW_VER = 2.02.a
+ PARAMETER C_SCK_RATIO = 2
+ PARAMETER C_BASEADDR = 0x83400000
+ PARAMETER C_HIGHADDR = 0x8340ffff
+ BUS_INTERFACE SPLB = mb_plb
+ PORT IP2INTC_Irpt = xps_spi_1_IP2INTC_Irpt
+ PORT SS = xps_spi_1_SS
+ PORT SCK = xps_spi_1_SCK
+ PORT MISO = xps_spi_1_MISO
+ PORT MOSI = xps_spi_1_MOSI
+END
+
+BEGIN xps_gpio
+ PARAMETER INSTANCE = xps_gpio_0
+ PARAMETER HW_VER = 2.00.a
+ PARAMETER C_INTERRUPT_PRESENT = 1
+ PARAMETER C_IS_DUAL = 1
+ PARAMETER C_GPIO2_WIDTH = 6
+ PARAMETER C_ALL_INPUTS_2 = 1
+ PARAMETER C_GPIO_WIDTH = 4
+ PARAMETER C_BASEADDR = 0x81400000
+ PARAMETER C_HIGHADDR = 0x8140ffff
+ BUS_INTERFACE SPLB = mb_plb
+ PORT IP2INTC_Irpt = xps_gpio_0_IP2INTC_Irpt
+ PORT GPIO2_IO_I = xps_gpio_0_GPIO2_IO_I
+ PORT GPIO_IO = xps_gpio_0_GPIO_IO
+END
+
+BEGIN fle_tonegen
+ PARAMETER INSTANCE = fle_tonegen_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0x7fc00000
+ PARAMETER C_HIGHADDR = 0x7fc0ffff
+ BUS_INTERFACE SOPB = opb_v20_0
 END
 

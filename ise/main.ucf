@@ -1,50 +1,273 @@
+#####################################
+### Main options for this project ###
+#####################################
 CONFIG PART = XC3SD3400AFG676-5;
 TEMPERATURE  = 25 C;
 CONFIG VCCAUX  = 2.5;
 VOLTAGE  = 1.2;
 CONFIG VREF  = F22, AB24, U24, R23, M24, H26, G25, B26, V26, U26;
 
-################
-### Main CLK ###
-################
+##########################
+### Prohibit FPGA pins ###
+##########################
+# M0, M1, M2, VS0, VS1, VS2, INITB
+CONFIG PROHIBIT = P10,P1, AD4, AC4, Y7, AF9, AC4, AA12, AA15;
+
+#####################
+### LOC BUFGMUX's ###
+#####################
+INST "inst_microblaze_systems/clock_generator_0/clock_generator_0/DCM1_CLK0_BUFG_INST" LOC = BUFGMUX_X1Y11;
+INST "pci_clk_p_3_OBUF_BUFG" LOC = BUFGMUX_X0Y7;
+INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/bufg_mii_rx_clk" LOC = BUFGMUX_X2Y1;
+INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/bufg_mii_rx_clk" LOC = BUFGMUX_X1Y1;
+INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/bufg_mii_tx_clk" LOC = BUFGMUX_X2Y0;
+INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/bufg_mii_tx_clk" LOC = BUFGMUX_X1Y0;
+INST "inst_microblaze_systems/clock_generator_0/clock_generator_0/DCM1_CLK2X_BUFG_INST" LOC = BUFGMUX_X1Y10;
+INST "inst_microblaze_systems/clock_generator_0/clock_generator_0/DCM0_CLK90_BUFG_INST" LOC = BUFGMUX_X2Y10;
+INST "ac97_clk_BUFGP/BUFG" LOC = BUFGMUX_X3Y5;
+INST "inst_microblaze_systems/clock_generator_0/clock_generator_0/DCM0_CLK0_BUFG_INST" LOC = BUFGMUX_X2Y11;
+INST "sysace_clk_BUFGP/BUFG" LOC = BUFGMUX_X0Y2;
+
+#################
+### LOC DCM's ###
+#################
+INST "inst_microblaze_systems/clock_generator_0/clock_generator_0/DCM1_INST/Using_Virtex.DCM_INST" LOC = DCM_X1Y3;
+INST "inst_microblaze_systems/clock_generator_0/clock_generator_0/DCM0_INST/Using_Virtex.DCM_INST" LOC = DCM_X2Y3;
+
+##################################################################
+### Enable Full Timing Path Analysis (Always on if FSL Enable) ###
+##################################################################
+#ENABLE=sr_reg_o;
+
+#################################################
+### Create Partition Blocks for main IP-Cores ###
+#################################################
+# Microblaze
+INST "inst_microblaze_systems/microblaze_0" AREA_GROUP = "pblock_1";
+AREA_GROUP "pblock_1" RANGE=SLICE_X52Y131:SLICE_X115Y0;
+AREA_GROUP "pblock_1" RANGE=DSP48A_X3Y0:DSP48A_X4Y15;
+AREA_GROUP "pblock_1" RANGE=RAMB16_X3Y0:RAMB16_X4Y15;
+# MPMC
+INST "inst_microblaze_systems/mpmc_0" AREA_GROUP = "pblock_inst_mcrblz_systms_mpmc_0";
+AREA_GROUP "pblock_inst_mcrblz_systms_mpmc_0" RANGE=SLICE_X72Y0:SLICE_X115Y207;
+AREA_GROUP "pblock_inst_mcrblz_systms_mpmc_0" RANGE=DSP48A_X3Y0:DSP48A_X4Y25;
+AREA_GROUP "pblock_inst_mcrblz_systms_mpmc_0" RANGE=RAMB16_X3Y0:RAMB16_X4Y25;
+# External Memory Controller
+INST "inst_microblaze_systems/xps_mch_emc_0d" AREA_GROUP = "pblock_3";
+AREA_GROUP "pblock_3" RANGE=SLICE_X60Y166:SLICE_X111Y207;
+AREA_GROUP "pblock_3" RANGE=DSP48A_X3Y21:DSP48A_X3Y25;
+AREA_GROUP "pblock_3" RANGE=RAMB16_X3Y21:RAMB16_X3Y25;
+# External Peripheral Controller
+INST "inst_microblaze_systems/xps_epc_0" AREA_GROUP = "pblock_4";
+AREA_GROUP "pblock_4" RANGE=SLICE_X28Y36:SLICE_X109Y131;
+AREA_GROUP "pblock_4" RANGE=DSP48A_X2Y5:DSP48A_X3Y15;
+AREA_GROUP "pblock_4" RANGE=RAMB16_X2Y5:RAMB16_X3Y15;
+# UART 16550
+INST "inst_microblaze_systems/xps_uart16550_0" AREA_GROUP = "pblock_2";
+AREA_GROUP "pblock_2" RANGE=SLICE_X0Y38:SLICE_X37Y107;
+AREA_GROUP "pblock_2" RANGE=DSP48A_X0Y5:DSP48A_X1Y12;
+AREA_GROUP "pblock_2" RANGE=RAMB16_X0Y5:RAMB16_X1Y12;
+# PCI
+INST "inst_microblaze_systems/plbv46_pci_0" AREA_GROUP = "pblock_5";
+AREA_GROUP "pblock_5" RANGE=SLICE_X0Y38:SLICE_X27Y111;
+AREA_GROUP "pblock_5" RANGE=DSP48A_X0Y5:DSP48A_X0Y16;
+AREA_GROUP "pblock_5" RANGE=RAMB16_X0Y5:RAMB16_X0Y16;
+# LL TEMAC 0
+INST "inst_microblaze_systems/xps_ll_temac_0" AREA_GROUP = "pblock_6";
+AREA_GROUP "pblock_6" RANGE=SLICE_X0Y207:SLICE_X51Y68;
+AREA_GROUP "pblock_6" RANGE=DSP48A_X0Y9:DSP48A_X2Y25;
+AREA_GROUP "pblock_6" RANGE=RAMB16_X0Y9:RAMB16_X2Y25;
+# LL TEMAC 1
+INST "inst_microblaze_systems/xps_ll_temac_1" AREA_GROUP = "pblock_7";
+AREA_GROUP "pblock_7" RANGE=SLICE_X0Y207:SLICE_X51Y68;
+AREA_GROUP "pblock_7" RANGE=DSP48A_X0Y9:DSP48A_X2Y25;
+AREA_GROUP "pblock_7" RANGE=RAMB16_X0Y9:RAMB16_X2Y25;
+
+########################
+### Main CLK Signals ###
+########################
 NET "clk" TNM_NET = "sys_clk_pin";
-#TIMESPEC TS_sys_clk_pin = PERIOD "sys_clk_pin" 62500 kHz HIGH 50 %;
 TIMESPEC TS_sys_clk_pin = PERIOD "sys_clk_pin" 75000 KHz HIGH 50 %;
-NET "clk" LOC = C13;
-NET "clk" IOSTANDARD = LVCMOS25;
+NET "clk" LOC = C13 | IOSTANDARD = LVCMOS25;
 
-################
-### Main RST ###
-################
-NET "rst" TIG;
-NET "rst" LOC = J7;
-NET "rst" IOSTANDARD = LVCMOS33;
+#######################
+### Main RST Signal ###
+#######################
+NET "rst" LOC = J7 | IOSTANDARD = LVCMOS33 | TIG;
 
+######################
+### SYSACE Signals ###
+######################
+NET "sysace_clk" LOC = N6 | IOSTANDARD = LVCMOS33;
+NET "sysace_clk" PERIOD = 26000 ps;
+NET "sysace_ce" LOC = AE3 			| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_we" LOC = AF3 			| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_oe" LOC = AE4 			| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_irq" LOC = AF4 		| IOSTANDARD = LVCMOS33;
 
-NET "ac97_clk" LOC = N6;
-NET "ac97_clk" IOSTANDARD = LVCMOS33;
-NET "ac97_sync" LOC = B1;
-NET "ac97_sync" IOSTANDARD = LVCMOS33;
-NET "ac97_reset" LOC = B2;
-NET "ac97_reset" IOSTANDARD = LVCMOS33;
-NET "ac97_dout" LOC = D3;
-NET "ac97_dout" IOSTANDARD = LVCMOS33;
-NET "ac97_din" LOC = E1;
-NET "ac97_din" IOSTANDARD = LVCMOS33;
+NET "sysace_data[0]" LOC = AC6 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[1]" LOC = AD6	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[2]" LOC = AE6 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[3]" LOC = AB7 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[4]" LOC = AD7 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[5]" LOC = AE7 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[6]" LOC = AC8 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[7]" LOC = AE8 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[8]" LOC = AF8 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[9]" LOC = W9 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[10]" LOC = Y9 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[11]" LOC = AB9 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[12]" LOC = AC9 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[13]" LOC = V10 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[14]" LOC = W10 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_data[15]" LOC = Y10 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_addr[0]" LOC = AA10 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_addr[1]" LOC = AE10 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_addr[2]" LOC = AF10 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_addr[3]" LOC = U11 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_addr[4]" LOC = V11 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_addr[5]" LOC = AC11 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "sysace_addr[6]" LOC = AD11 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
 
-NET "spi_miso" LOC = AF24;
-NET "spi_miso" IOSTANDARD = LVCMOS33;
-NET "spi_mosi" LOC = AB15;
-NET "spi_mosi" IOSTANDARD = LVCMOS33;
-NET "spi_sck" LOC = AE24;
-NET "spi_sck" IOSTANDARD = LVCMOS33;
-NET "spi_cs" LOC = AA7;
-NET "spi_cs" IOSTANDARD = LVCMOS33;
+###############################
+### Video Processor Signals ###
+###############################
+NET "video_int" 		LOC = AD10 	| IOSTANDARD = LVCMOS33 | TIG;
+NET "video_data[0]" 	LOC = AA17 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[1]" 	LOC = AD17 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[2]" 	LOC = AE17 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[3]" 	LOC = U16 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[4]" 	LOC = V16 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[5]" 	LOC = AB16 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[6]" 	LOC = AC16 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[7]" 	LOC = U15 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[8]" 	LOC = V15 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[9]" 	LOC = W15 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[10]" LOC = Y15 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[11]" LOC = W12 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[12]" LOC = V12 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[13]" LOC = AC15 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[14]" LOC = AD15 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_data[15]" LOC = AE15 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
 
-NET "i2c_sda" LOC = AF25;
-NET "i2c_sda" IOSTANDARD = LVCMOS33;
-NET "i2c_scl" LOC = AE25;
-NET "i2c_scl" IOSTANDARD = LVCMOS33;
+NET "video_addr" 		LOC = V14 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_rst" 		LOC = AC14 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_cs" 		LOC = AD14 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_wr" 		LOC = V13 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_rd" 		LOC = W13 	| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "video_hale"		LOC = ab12 	| IOSTANDARD = LVCMOS33 | DRIVE = 4 | SLEW = SLOW;
+
+##############################
+### USB Controller Signals ###
+##############################
+NET "usb_rd" 			LOC = AC22 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_wr" 			LOC = AF23 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[0]" 	LOC = AD22 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[1]" 	LOC = AC21 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[2]" 	LOC = AD21 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[3]" 	LOC = AE21 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[4]" 	LOC = AC20 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[5]" 	LOC = AD20 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[6]" 	LOC = AE20 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[7]" 	LOC = AF20 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[8]" 	LOC = AC19 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[9]" 	LOC = AD19 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[10]" 	LOC = AF19 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[11]" 	LOC = AE19 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[12]" 	LOC = AA18 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[13]" 	LOC = AB18 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[14]" 	LOC = AE18 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_data[15]" 	LOC = AF18 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_rst" 			LOC = V17  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_cs" 			LOC = AE23 | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_addr[0]" 	LOC = W17  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_addr[1]" 	LOC = Y17  | IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
+NET "usb_int" 			LOC = AF22 | IOSTANDARD = LVCMOS33;
+NET "usb_hub_rst"		LOC = y12 | IOSTANDARD = LVCMOS33 | DRIVE = 4 | SLEW = SLOW;
+
+#########################
+### NOR Flash Signals ###
+#########################
+NET "flash_addr[0]" 	LOC = B23 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[1]" 	LOC = C23 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[2]" 	LOC = D23 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[3]" 	LOC = A22 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[4]" 	LOC = C22 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[5]" 	LOC = D22 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[6]" 	LOC = B21 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[7]" 	LOC = C21 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[8]" 	LOC = D21 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[9]" 	LOC = E21 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[10]" LOC = A20 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[11]" LOC = B20 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[12]" LOC = C20 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[13]" LOC = D20 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[14]" LOC = F20 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[15]" LOC = G20 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[16]" LOC = A19 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[17]" LOC = B19 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[18]" LOC = F19 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[19]" LOC = G19 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[20]" LOC = A18 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[21]" LOC = B18 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[22]" LOC = C18 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[23]" LOC = D18 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[24]" LOC = B17 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[25]" LOC = C17 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_addr[26]" LOC = D17 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[0]" 	LOC = E17 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[1]" 	LOC = F17 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[2]" 	LOC = G17 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[3]" 	LOC = H17 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[4]" 	LOC = C16 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[5]" 	LOC = D16 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[6]" 	LOC = J16 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[7]" 	LOC = K16 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[8]" 	LOC = A15 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[9]" 	LOC = B15 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[10]" LOC = C15 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[11]" LOC = E15 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[12]" LOC = F15 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[13]" LOC = G15 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[14]" LOC = H15 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_data[15]" LOC = E14 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST; 
+NET "flash_rpn" 		LOC = F14 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_cen" 		LOC = D13 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_oen" 		LOC = A12 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_wen" 		LOC = B12 | IOSTANDARD = LVCMOS25 | DRIVE = 6 | SLEW = FAST;
+NET "flash_busy" 		LOC = H18 | IOSTANDARD = LVCMOS25 | TIG;
+
+##########################
+### AC97 Codec Signals ###
+##########################
+NET "ac97_clk" PERIOD = 80;
+NET "ac97_clk" 	LOC = N19	| IOSTANDARD = LVCMOS33;
+NET "ac97_sync" 	LOC = B1		| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "ac97_reset" 	LOC = B2		| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "ac97_dout" 	LOC = D3		| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "ac97_din" 	LOC = E1		| IOSTANDARD = LVCMOS33;
+
+#######################
+### I2C Bus Signals ###
+#######################
+NET "i2c_sda" LOC = AF25 	| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "i2c_scl" LOC = AE25 	| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+
+#########################################
+### SPI (Configure Flash) Bus Signals ###
+#########################################
+NET "spi_conf_miso" 	LOC = AF24 	| IOSTANDARD = LVCMOS33;
+NET "spi_conf_mosi" 	LOC = AB15 	| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "spi_conf_sck" 	LOC = AE24 	| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "spi_conf_cs" 	LOC = AA7 	| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+
+####################################
+### SPI (User Flash) Bus Signals ###
+####################################
+NET "spi_miso" LOC = AA5 	| IOSTANDARD = LVCMOS33;
+NET "spi_mosi" LOC = T9 	| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "spi_sck" 	LOC = T10 	| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "spi_cs" 	LOC = U9 	| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
 
 NET "uart0_tx" LOC = G3;
 NET "uart0_tx" IOSTANDARD = LVCMOS33;
@@ -55,105 +278,558 @@ NET "uart0_rx" IOSTANDARD = LVCMOS33;
 ###################
 ### PCI Signals ###
 ###################
-NET "pci_ad[31]" LOC = J5;
-NET "pci_ad[31]" IOSTANDARD = PCI33_3;
-NET "pci_ad[30]" LOC = M9;
-NET "pci_ad[30]" IOSTANDARD = PCI33_3;
-NET "pci_ad[29]" LOC = M10;
-NET "pci_ad[29]" IOSTANDARD = PCI33_3;
-NET "pci_ad[28]" LOC = K4;
-NET "pci_ad[28]" IOSTANDARD = PCI33_3;
-NET "pci_ad[27]" LOC = K5;
-NET "pci_ad[27]" IOSTANDARD = PCI33_3;
-NET "pci_ad[26]" LOC = K2;
-NET "pci_ad[26]" IOSTANDARD = PCI33_3;
-NET "pci_ad[25]" LOC = K3;
-NET "pci_ad[25]" IOSTANDARD = PCI33_3;
-NET "pci_ad[24]" LOC = L3;
-NET "pci_ad[24]" IOSTANDARD = PCI33_3;
-NET "pci_ad[23]" LOC = L4;
-NET "pci_ad[23]" IOSTANDARD = PCI33_3;
-NET "pci_ad[22]" LOC = M7;
-NET "pci_ad[22]" IOSTANDARD = PCI33_3;
-NET "pci_ad[21]" LOC = M8;
-NET "pci_ad[21]" IOSTANDARD = PCI33_3;
-NET "pci_ad[20]" LOC = M3;
-NET "pci_ad[20]" IOSTANDARD = PCI33_3;
-NET "pci_ad[19]" LOC = M4;
-NET "pci_ad[19]" IOSTANDARD = PCI33_3;
-NET "pci_ad[18]" LOC = M6;
-NET "pci_ad[18]" IOSTANDARD = PCI33_3;
-NET "pci_ad[17]" LOC = M5;
-NET "pci_ad[17]" IOSTANDARD = PCI33_3;
-NET "pci_ad[16]" LOC = M2;
-NET "pci_ad[16]" IOSTANDARD = PCI33_3;
-NET "pci_ad[15]" LOC = P6;
-NET "pci_ad[15]" IOSTANDARD = PCI33_3;
-NET "pci_ad[14]" LOC = P7;
-NET "pci_ad[14]" IOSTANDARD = PCI33_3;
-NET "pci_ad[13]" LOC = R6;
-NET "pci_ad[13]" IOSTANDARD = PCI33_3;
-NET "pci_ad[12]" LOC = R5;
-NET "pci_ad[12]" IOSTANDARD = PCI33_3;
-NET "pci_ad[11]" LOC = P9;
-NET "pci_ad[11]" IOSTANDARD = PCI33_3;
-NET "pci_ad[10]" LOC = P8;
-NET "pci_ad[10]" IOSTANDARD = PCI33_3;
-NET "pci_ad[9]" LOC = U4;
-NET "pci_ad[9]" IOSTANDARD = PCI33_3;
-NET "pci_ad[8]" LOC = T5;
-NET "pci_ad[8]" IOSTANDARD = PCI33_3;
-NET "pci_ad[7]" LOC = R9;
-NET "pci_ad[7]" IOSTANDARD = PCI33_3;
-NET "pci_ad[6]" LOC = R10;
-NET "pci_ad[6]" IOSTANDARD = PCI33_3;
-NET "pci_ad[5]" LOC = U2;
-NET "pci_ad[5]" IOSTANDARD = PCI33_3;
-NET "pci_ad[4]" LOC = U1;
-NET "pci_ad[4]" IOSTANDARD = PCI33_3;
-NET "pci_ad[3]" LOC = R7;
-NET "pci_ad[3]" IOSTANDARD = PCI33_3;
-NET "pci_ad[2]" LOC = R8;
-NET "pci_ad[2]" IOSTANDARD = PCI33_3;
-NET "pci_ad[1]" LOC = V2;
-NET "pci_ad[1]" IOSTANDARD = PCI33_3;
-NET "pci_ad[0]" LOC = V1;
-NET "pci_ad[0]" IOSTANDARD = PCI33_3;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO0/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO1/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO2/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO3/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO4/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO5/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO6/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO7/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO8/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO9/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO10/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO11/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO12/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO13/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO14/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO15/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO16/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO17/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO18/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO19/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO20/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO21/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO22/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO23/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO24/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO25/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO26/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO27/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO28/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO29/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO30/OFD" IOB = TRUE ;
+INST "inst_microblaze_systems/plbv46_pci_0/plbv46_pci_0/PCI_CORE_notV5_generate.pci_core/I_pcim_lc_32bit_generate.PCI_LC/PCI-AD/IO31/OFD" IOB = TRUE ;
 
-NET "pci_cbe[3]" LOC = N4;
-NET "pci_cbe[3]" IOSTANDARD = PCI33_3;
-NET "pci_cbe[2]" LOC = N2;
-NET "pci_cbe[2]" IOSTANDARD = PCI33_3;
-NET "pci_cbe[1]" LOC = T4;
-NET "pci_cbe[1]" IOSTANDARD = PCI33_3;
-NET "pci_cbe[0]" LOC = T3;
-NET "pci_cbe[0]" IOSTANDARD = PCI33_3;
-NET "pci_par" LOC = N1;
-NET "pci_par" IOSTANDARD = PCI33_3;
-NET "pci_stop_n" LOC = R4;
-NET "pci_stop_n" IOSTANDARD = PCI33_3;
-NET "pci_devsel_n" LOC = R1;
-NET "pci_devsel_n" IOSTANDARD = PCI33_3;
-NET "pci_frame_n" LOC = N7;
-NET "pci_frame_n" IOSTANDARD = PCI33_3;
-NET "pci_serr_n" LOC = K6;
-NET "pci_serr_n" IOSTANDARD = PCI33_3;
-NET "pci_perr_n" LOC = R3;
-NET "pci_perr_n" IOSTANDARD = PCI33_3;
-//LOC = "N9"	| 
-NET "pci_trdy_n" IOSTANDARD = PCI33_3;
-NET "pci_irdy_n" LOC = P2;
-NET "pci_irdy_n" IOSTANDARD = PCI33_3;
+##########################################################
+# Force IOB Flip Flop Use For Data Path Input Flip Flops #
+##########################################################
+INST "*PCI_CORE/XPCI_CBQ3"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_CBQ2"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_CBQ1"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_CBQ0"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ31"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ30"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ29"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ28"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ27"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ26"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ25"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ24"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ23"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ22"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ21"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ20"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ19"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ18"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ17"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ16"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ15"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ14"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ13"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ12"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ11"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ10"                                  IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ9"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ8"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ7"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ6"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ5"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ4"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ3"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ2"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ1"                                   IOB = TRUE ;
+INST "*PCI_CORE/XPCI_ADQ0"                                   IOB = TRUE ;
+
+###############################################
+# Force IOB Flip Flop Use For Control Signals #
+###############################################
+INST "*PCI_CORE*/*PCI_LC/MASTER/REQ_IOB/IFD"                   IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/MASTER/REQ_IOB/OFD"                   IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/MASTER/REQO_OE"                       IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/MASTER/GNT_IOB/IFD"                   IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/MASTER/GNT_IOB/OFD"                   IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/IDSEL/IFD"                            IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/IDSEL/OFD"                            IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-PAR/OE_SERR_FF"                   IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/PERR_OE"              IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/SERR/IFD"                             IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/SERR/OFD"                             IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/PERR/IFD"                             IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/PERR/OFD"                             IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OE_FRAME"             IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OE_REQ64"             IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OE_IRDY"              IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/FRAME/IFD"                            IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/FRAME/OFD"                            IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/IRDY/IFD"                             IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/IRDY/OFD"                             IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-XOE/OE_DEVSEL"  IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-XOE/OE_STOP"    IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-XOE/OE_TRDY"    IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/DEVSEL/IFD"                           IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/DEVSEL/OFD"                           IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/STOP/IFD"                             IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/STOP/OFD"                             IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/TRDY/IFD"                             IOB = TRUE ;
+INST "*PCI_CORE*/*PCI_LC/TRDY/OFD"                             IOB = TRUE ;
+
+################################################################################
+# Placement Constraints For Control Signal "NS" Functions
+################################################################################
+# **** NS_REQ **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/REQ/REQ1"               		LOC = "SLICE_X1Y106";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/REQ/REQ3"               		LOC = "SLICE_X1Y106";
+# **** NS_DEVSEL **** (F, G, X)
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-DSEL/DSEL5"		LOC = "SLICE_X1Y102";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-DSEL/DSEL11"	LOC = "SLICE_X1Y102";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-DSEL/DEVSEL"	LOC = "SLICE_X1Y102";
+# **** NS_STOP **** (F, G, X)
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-STOP/STOP12"	LOC = "SLICE_X1Y100";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-STOP/STOP13"	LOC = "SLICE_X1Y100";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-STOP/STOP"		LOC = "SLICE_X1Y100";
+# **** NS_IRDY **** (F, G, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/IRDY/IRDY3"             		LOC = "SLICE_X1Y104";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/IRDY/IRDY4"             		LOC = "SLICE_X1Y104";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/IRDY/IIRDY_I-"          		LOC = "SLICE_X1Y104";
+# **** NS_TRDY **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-TRDY/TRDY10"	LOC = "SLICE_X1Y103";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-TRDY/TRDY11"	LOC = "SLICE_X1Y103";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-TRDY/TRDY"		LOC = "SLICE_X1Y103";
+# **** NS_FRAME **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/FRAME/FRAME3"           		LOC = "SLICE_X1Y105";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/FRAME/FRAME4"           		LOC = "SLICE_X1Y105";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/FRAME/IFRAME_I-"        		LOC = "SLICE_X1Y105";
+# **** CE_FRAME **** (F)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/FRAME/FRAME_5"          		LOC = "SLICE_X0Y105";
+# **** NS_PERR **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/PCI-PAR/PERR_1"                		LOC = "SLICE_X0Y101";
+INST  "*PCI_CORE*/*PCI_LC/PCI-PAR/PERR_2"                		LOC = "SLICE_X0Y101";
+INST  "*PCI_CORE*/*PCI_LC/PCI-PAR/LC_PERR"               		LOC = "SLICE_X0Y101";
+
+################################################################################
+# Placement Constraints For Parity / Byte Enable "NS" Functions
+################################################################################
+# **** NS_PAR **** (G, F)
+INST  "*PCI_CORE*/*PCI_LC/PCI-PAR/PAR_1"                 LOC = "SLICE_X1Y107";
+INST  "*PCI_CORE*/*PCI_LC/PCI-PAR/PAR_2"                 LOC = "SLICE_X1Y107";
+# **** NS_CBE **** (F, G, F, G, F, G, F, G)
+INST  "*PCI_CORE*/*PCI_LC/PCI-CBE/IO3/MAPF"              LOC = "SLICE_X1Y111";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CBE/IO3/MAPG"              LOC = "SLICE_X1Y111";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CBE/IO2/MAPF"              LOC = "SLICE_X1Y110";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CBE/IO2/MAPG"              LOC = "SLICE_X1Y110";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CBE/IO1/MAPF"              LOC = "SLICE_X1Y97";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CBE/IO1/MAPG"              LOC = "SLICE_X1Y97";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CBE/IO0/MAPF"              LOC = "SLICE_X1Y96";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CBE/IO0/MAPG"              LOC = "SLICE_X1Y96";
+
+################################################################################
+# Placement Constraints For Control Signal "OE" Functions
+################################################################################
+# **** OE_COMMON **** (G, F)
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-XOE/OTI_1"        LOC = "SLICE_X1Y101";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-XOE/OTI_3"        LOC = "SLICE_X1Y101";
+# **** OE_FRAME **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OEF1"          LOC = "SLICE_X0Y104";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OEF2"          LOC = "SLICE_X0Y104";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OE_FRAME_INT"        LOC = "SLICE_X0Y104";
+
+################################################################################
+# Placement Constraints For Common Live Logic
+################################################################################
+# **** APERR_N **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/PCI-PAR/APERR_1"               LOC = "SLICE_X0Y100";
+INST  "*PCI_CORE*/*PCI_LC/PCI-PAR/APERR_2"               LOC = "SLICE_X0Y100";
+INST  "*PCI_CORE*/*PCI_LC/PCI-PAR/APERR_N"               LOC = "SLICE_X0Y100";
+# **** DATA_VLD **** (G, X, F, X)
+INST  "*PCI_CORE*/*PCI_LC/DATA_VLD/MDV_MAP"              LOC = "SLICE_X2Y105";
+INST  "*PCI_CORE*/*PCI_LC/DATA_VLD/MDV_FF"               LOC = "SLICE_X2Y105";
+INST  "*PCI_CORE*/*PCI_LC/DATA_VLD/SDV_MAP"              LOC = "SLICE_X2Y105";
+INST  "*PCI_CORE*/*PCI_LC/DATA_VLD/SDV_FF"               LOC = "SLICE_X2Y105";
+# **** OUT_SEL **** (F, X, G, X)
+INST  "*PCI_CORE*/*PCI_LC/OUT_SEL/OSEL3"                 LOC = "SLICE_X2Y104";
+INST  "*PCI_CORE*/*PCI_LC/OUT_SEL/OSEL_FF"               LOC = "SLICE_X2Y104";
+# **** EOT **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/EOT/EOT0"                      LOC = "SLICE_X1Y98";
+INST  "*PCI_CORE*/*PCI_LC/EOT/EOT1"                      LOC = "SLICE_X1Y98";
+INST  "*PCI_CORE*/*PCI_LC/EOT/EOT_FF"                    LOC = "SLICE_X1Y98";
+# **** NEWDATA **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/OUT_CE/ND1"                    LOC = "SLICE_X0Y102";
+INST  "*PCI_CORE*/*PCI_LC/OUT_CE/ND2"                    LOC = "SLICE_X0Y102";
+INST  "*PCI_CORE*/*PCI_LC/OUT_CE/NDFF"                   LOC = "SLICE_X0Y102";
+# **** SOFTCE **** (G, F)
+INST  "*PCI_CORE*/*PCI_LC/OUT_CE/SOFT1"                  LOC = "SLICE_X0Y103";
+INST  "*PCI_CORE*/*PCI_LC/OUT_CE/SOFT2"                  LOC = "SLICE_X0Y103";
+# **** PAR_CE **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/OUT_CE/ZCEB1"                  LOC = "SLICE_X3Y104";
+INST  "*PCI_CORE*/*PCI_LC/OUT_CE/ZCEB2"                  LOC = "SLICE_X3Y104";
+INST  "*PCI_CORE*/*PCI_LC/OUT_CE/PAR_CE"                 LOC = "SLICE_X3Y104";
+
+################################################################################
+# Placement Constraints For Target Live Logic
+################################################################################
+# **** PWIN **** (G, F, X, X)
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PWIN1"                LOC = "SLICE_X3Y105";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PWIN_FF"              LOC = "SLICE_X3Y105";
+# **** S_FIRST **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-TRDY/SF3"        LOC = "SLICE_X0Y106";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-TRDY/SF4"        LOC = "SLICE_X0Y106";
+INST  "*PCI_CORE*/*PCI_LC/PCI-CNTL/PCI-OFCN/PCI-TRDY/S1FF"        LOC = "SLICE_X0Y106";
+
+################################################################################
+# Placement Constraints For Initiator Live Logic
+################################################################################
+# **** S_TAR **** (G, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/S_TAR/S_TAR_MAP"        LOC = "SLICE_X3Y101";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/S_TAR/S_TAR"            LOC = "SLICE_X3Y101";
+# **** FRAME TURN_ON **** (G)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/FRAME/FRAME2"           LOC = "SLICE_X0Y105";
+# **** M_FIRST **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/IRDY/MF1"               LOC = "SLICE_X0Y107";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/IRDY/MF2"               LOC = "SLICE_X0Y107";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/IRDY/M1FF"              LOC = "SLICE_X0Y107";
+# **** FAIL64 **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/XFERFAIL/FAIL1"         LOC = "SLICE_X1Y99";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/XFERFAIL/FAIL2"         LOC = "SLICE_X1Y99";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/XFERFAIL/FAIL_FF"        LOC = "SLICE_X1Y99";
+# **** I_IDLE **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/I_IDLE/IIDLE4"          LOC = "SLICE_X3Y106";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/I_IDLE/IIDLE5"          LOC = "SLICE_X3Y106";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/I_IDLE/I_IDLE_FF"        LOC = "SLICE_X3Y106";
+# **** ADDR_BE **** (G, F, X, G, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/ADDR/ABE"               LOC = "SLICE_X2Y107";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/ADDR/ABE_FF"            LOC = "SLICE_X2Y107";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/ADDR/MAN"               LOC = "SLICE_X2Y107";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/ADDR/MAN_FF"            LOC = "SLICE_X2Y107";
+# **** DR_BUS **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/DR_BUS/DRB6"            LOC = "SLICE_X3Y107";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/DR_BUS/DRB9"            LOC = "SLICE_X3Y107";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/DR_BUS/DR_BUS_FF"        LOC = "SLICE_X3Y107";
+# **** M_DATA **** (G, F, X, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/M_DATA/MDA1"            LOC = "SLICE_X2Y106";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/M_DATA/MDA2"            LOC = "SLICE_X2Y106";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/M_DATA/M_DATA"          LOC = "SLICE_X2Y106";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/M_DATA/M_DATA1"         LOC = "SLICE_X2Y106";
+# **** PRE-SLOT (HAS GNT) **** (F, G)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/SLOT32_1"        LOC = "SLICE_X3Y100";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/SLOT32_3"        LOC = "SLICE_X3Y100";
+# **** SLOT (PUT NEAR START_AD) **** (G, F, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/SLOT32_2"        LOC = "SLICE_X2Y101";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/SLOT32_4"        LOC = "SLICE_X2Y101";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/SLOT_FF"        LOC = "SLICE_X2Y101";
+# **** START_AD **** (G)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/SAD1"          LOC = "SLICE_X2Y100";
+
+################################################################################
+# Placement Constraints For Parity / Byte Enable / Datapath "OE" Functions
+################################################################################
+# **** OE_T **** (G, G)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OA32_1"        LOC = "SLICE_X2Y102";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OA32_2"        LOC = "SLICE_X3Y102";
+# **** OE_LT **** (F, F)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OA32_3"        LOC = "SLICE_X2Y102";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OA32_4"        LOC = "SLICE_X3Y102";
+# **** OE_LB **** (G, G)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OA32_5"        LOC = "SLICE_X2Y103";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OA32_6"        LOC = "SLICE_X3Y103";
+# **** OE_B **** (F, F, X)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OA32_7"        LOC = "SLICE_X2Y103";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OA32_8"        LOC = "SLICE_X3Y103";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/L_PAR_OE"        LOC = "SLICE_X3Y103";
+# **** OE_CBE **** (F, F)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OC32_1"        LOC = "SLICE_X3Y101";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/OE_FRAME/OC32_2"        LOC = "SLICE_X2Y100";
+
+################################################################################
+# Placement Constraints For Less Important Things
+################################################################################
+# **** DEVICE TIMEOUT A **** (F, G, F, G)
+INST  "*PCI_CORE*/*PCI_LC/MASTER/FRAME/FRAME6"           LOC = "SLICE_X1Y108";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/FRAME/FRAME8"           LOC = "SLICE_X1Y108";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/FRAME/FRAME7"           LOC = "SLICE_X1Y109";
+INST  "*PCI_CORE*/*PCI_LC/MASTER/FRAME/FRAME9"           LOC = "SLICE_X1Y109";
+
+################################################################################
+# Clock Buffer Placement
+################################################################################
+#
+# Not applicable to global clocks
+#
+################################################################################
+# Netflag Attributes
+################################################################################
+NET "*PCI_CORE*/*PCI_LC/FRAME-"                                                 S ;
+NET "*PCI_CORE*/*PCI_LC/IRDY-"                                                  S ;
+NET "*PCI_CORE*/*PCI_LC/DEVSEL-"                                                S ;
+NET "*PCI_CORE*/*PCI_LC/TRDY-"                                                  S ;
+NET "*PCI_CORE*/*PCI_LC/STOP-"                                                  S ;
+NET "*PCI_CORE*/*PCI_LC/PERR-"                                                  S ;
+NET "*PCI_CORE*/*PCI_LC/SERR-"                                                  S ;
+NET "*PCI_CORE*/*PCI_LC/M_SRC_EN"                                               S ;
+NET "*PCI_CORE*/*PCI_LC/S_SRC_EN"                                               S ;
+NET "*PCI_CORE*/*PCI_LC/M_DATA_VLD"                                             S ;
+NET "*PCI_CORE*/*PCI_LC/S_DATA_VLD"                                             S ;
+NET "*PCI_CORE*/*PCI_LC/S_DATA"                                                 S ;
+NET "*PCI_CORE*/*PCI_LC/M_DATA"                                                 S ;
+NET "*PCI_CORE*/*PCI_LC/M_ADDR_N"                                               S ;
+###INST "*" KEEP_HIERARCHY = FALSE ;
+
+################################################################################
+# I/O Time Names
+################################################################################
+#
+NET  "pci_serr_n"                                  TNM = PADS:PCI_PADS_C ;
+NET  "pci_perr_n"                                  TNM = PADS:PCI_PADS_C ;
+NET  "pci_req_n<*>"                                    TNM = PADS:PCI_PADS_G ;
+NET  "pci_gnt_n<*>"                                    TNM = PADS:PCI_PADS_G ;
+NET  "pci_frame_n"                                 TNM = PADS:PCI_PADS_C ;
+NET  "pci_irdy_n"                                  TNM = PADS:PCI_PADS_C ;
+NET  "pci_trdy_n"                                  TNM = PADS:PCI_PADS_C ;
+NET  "pci_devsel_n"                                TNM = PADS:PCI_PADS_C ;
+NET  "pci_stop_n"                                  TNM = PADS:PCI_PADS_C ;
+NET  "pci_cbe<3>"                                TNM = PADS:PCI_PADS_B ;
+NET  "pci_cbe<2>"                                TNM = PADS:PCI_PADS_B ;
+NET  "pci_cbe<1>"                                TNM = PADS:PCI_PADS_B ;
+NET  "pci_cbe<0>"                                TNM = PADS:PCI_PADS_B ;
+NET  "pci_par"                                   TNM = PADS:PCI_PADS_P ;
+##NET  "*PCI_CORE/IDSEL_I"                                  TNM = PADS:PCI_PADS_C ;
+##NET  "*PCI_CORE/INTA_O"                                   TNM = PADS:PCI_PADS_X ;
+##NET  "*PCI_CORE/RST_I"                                    TNM = PADS:PCI_PADS_X ;
+#
+NET  "pci_ad<31>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<30>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<29>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<28>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<27>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<26>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<25>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<24>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<23>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<22>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<21>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<20>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<19>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<18>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<17>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<16>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<15>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<14>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<13>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<12>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<11>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<10>"                                TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<9>"                                 TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<8>"                                 TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<7>"                                 TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<6>"                                 TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<5>"                                 TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<4>"                                 TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<3>"                                 TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<2>"                                 TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<1>"                                 TNM = PADS:PCI_PADS_D ;
+NET  "pci_ad<0>"                                 TNM = PADS:PCI_PADS_D ;
+#
+################################################################################
+# Special I/O Time Names
+################################################################################
+#
+INST "*PCI_CORE*/*PCI_LC/PCI-CBE/IO3/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-CBE/IO2/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-CBE/IO1/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-CBE/IO0/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+#
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO31/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO30/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO29/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO28/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO27/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO26/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO25/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO24/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO23/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO22/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO21/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO20/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO19/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO18/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO17/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO16/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO15/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO14/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO13/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO12/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO11/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO10/OFD"                   TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO9/OFD"                    TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO8/OFD"                    TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO7/OFD"                    TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO6/OFD"                    TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO5/OFD"                    TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO4/OFD"                    TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO3/OFD"                    TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO2/OFD"                    TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO1/OFD"                    TNM = FFS:PCI_FFS_OCE ;
+INST "*PCI_CORE*/*PCI_LC/PCI-AD/IO0/OFD"                    TNM = FFS:PCI_FFS_OCE ;
+#
+INST "*PCI_CORE/XPCI_CBQ3"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_CBQ2"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_CBQ1"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_CBQ0"                                TNM = FFS:PCI_FFS_ICE ;
+#
+INST "*PCI_CORE/XPCI_ADQ31"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ30"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ29"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ28"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ27"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ26"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ25"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ24"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ23"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ22"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ21"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ20"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ19"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ18"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ17"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ16"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ15"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ14"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ13"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ12"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ11"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ10"                               TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ9"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ8"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ7"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ6"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ5"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ4"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ3"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ2"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ1"                                TNM = FFS:PCI_FFS_ICE ;
+INST "*PCI_CORE/XPCI_ADQ0"                                TNM = FFS:PCI_FFS_ICE ;
+#
+################################################################################
+# Time Groups
+################################################################################
+#
+INST "*PCI_CORE_notV5_generate.pci_core*" TNM = FFS:PCIM_FFS ;
+TIMEGRP "ALL_FFS" = "PCIM_FFS" : "USER_FFS" ;
+TIMEGRP "FAST_FFS" = "PCI_FFS_ICE" : "PCI_FFS_OCE" ;
+TIMEGRP "SLOW_FFS" = "ALL_FFS" : EXCEPT : "FAST_FFS" ;
+#
+################################################################################
+# Time Specs
+################################################################################
+#
+# Important Note:  The timespecs used in this section cover all possible
+# paths.  Depending on the design options, some of the timespecs may
+# not contain any paths.  Such timespecs are ignored by PAR and TRCE.
+#
+#             1) Clock to Output        =      11.000 ns
+#             2) Setup                  =       7.000 ns
+#             3) Grant Setup            =      10.000 ns
+#             4) Datapath Tristate      =      28.000 ns
+#             5) Period                 =      30.000 ns
+#
+# Note:  Timespecs are derived from the PCI Bus Specification.  Use of
+# offset constraints allows the timing tools to automatically include
+# the clock delay estimates.  These constraints are for 33 MHz operation.
+#
+# The following timespecs are for setup.
+#
+TIMEGRP "PCI_PADS_D" OFFSET = IN   7.000 VALID  7.000 BEFORE "pci_clk" TIMEGRP "ALL_FFS"  ;
+TIMEGRP "PCI_PADS_B" OFFSET = IN   7.000 VALID  7.000 BEFORE "pci_clk" TIMEGRP "ALL_FFS"  ;
+TIMEGRP "PCI_PADS_P" OFFSET = IN   7.000 VALID  7.000 BEFORE "pci_clk" TIMEGRP "ALL_FFS"  ;
+TIMEGRP "PCI_PADS_C" OFFSET = IN   7.000 VALID  7.000 BEFORE "pci_clk" TIMEGRP "ALL_FFS"  ;
+TIMEGRP "PCI_PADS_G" OFFSET = IN  10.000 VALID 10.000 BEFORE "pci_clk" TIMEGRP "ALL_FFS"  ;
+#
+# The following timespecs are for clock to out where stepping is not used.
+#
+TIMEGRP "PCI_PADS_D" OFFSET = OUT 11.000 AFTER  "pci_clk" TIMEGRP "FAST_FFS" ;
+TIMEGRP "PCI_PADS_B" OFFSET = OUT 11.000 AFTER  "pci_clk" TIMEGRP "FAST_FFS" ;
+TIMEGRP "PCI_PADS_P" OFFSET = OUT 11.000 AFTER  "pci_clk" TIMEGRP "FAST_FFS" ;
+TIMEGRP "PCI_PADS_C" OFFSET = OUT 11.000 AFTER  "pci_clk" TIMEGRP "ALL_FFS"  ;
+TIMEGRP "PCI_PADS_G" OFFSET = OUT 11.000 AFTER  "pci_clk" TIMEGRP "ALL_FFS"  ;
+#
+# The following timespecs are for clock to out where stepping is used.
+#
+TIMEGRP "PCI_PADS_D" OFFSET = OUT 28.000 AFTER  "pci_clk" TIMEGRP "SLOW_FFS" ;
+TIMEGRP "PCI_PADS_B" OFFSET = OUT 28.000 AFTER  "pci_clk" TIMEGRP "SLOW_FFS" ;
+TIMEGRP "PCI_PADS_P" OFFSET = OUT 28.000 AFTER  "pci_clk" TIMEGRP "SLOW_FFS" ;
+
+NET "pci_ad[31]" LOC = J5	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[30]" LOC = M9	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[29]" LOC = M10	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[28]" LOC = K4	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[27]" LOC = K5	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[26]" LOC = K2	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[25]" LOC = K3	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[24]" LOC = L3	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[23]" LOC = L4	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[22]" LOC = M7	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[21]" LOC = M8	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[20]" LOC = M3	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[19]" LOC = M4	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[18]" LOC = M6	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[17]" LOC = M5	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[16]" LOC = M2	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[15]" LOC = P6	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[14]" LOC = P7	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[13]" LOC = R6	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[12]" LOC = R5	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[11]" LOC = P9	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[10]" LOC = P8	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[9]" LOC = U4	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[8]" LOC = T5	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[7]" LOC = R9	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[6]" LOC = R10	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[5]" LOC = U2	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[4]" LOC = U1	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[3]" LOC = R7	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[2]" LOC = R8	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[1]" LOC = V2	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_ad[0]" LOC = V1	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+
+NET "pci_cbe[3]" LOC = N4	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 0;
+NET "pci_cbe[2]" LOC = N2	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 0;
+NET "pci_cbe[1]" LOC = T4	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 0;
+NET "pci_cbe[0]" LOC = T3	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 0;
+
+NET "pci_par" LOC = N1		| IOSTANDARD = PCI33_3;
+NET "pci_stop_n" LOC = R4	| IOSTANDARD = PCI33_3  | IFD_DELAY_VALUE  = 4 | IBUF_DELAY_VALUE  = 1;
+NET "pci_devsel_n" LOC = R1	| IOSTANDARD = PCI33_3  | IFD_DELAY_VALUE  = 4 | IBUF_DELAY_VALUE  = 1;
+NET "pci_frame_n" LOC = N7	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 1;
+NET "pci_serr_n" LOC = K6	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_perr_n" LOC = R3	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 2;
+NET "pci_trdy_n" LOC = N9	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 1;
+NET "pci_irdy_n" LOC = P2	| IOSTANDARD = PCI33_3 | IFD_DELAY_VALUE = 4 | IBUF_DELAY_VALUE = 1;
 
 //LOC = "N6"	| 
-NET "pci_gnt_n[0]" IOSTANDARD = PCI33_3;
-NET "pci_gnt_n[1]" LOC = AC1;
-NET "pci_gnt_n[1]" IOSTANDARD = PCI33_3;
+#NET "pci_gnt_n[0]" LOC = AC1 | IOSTANDARD = PCI33_3;
+NET "pci_gnt_n<*>" IOSTANDARD = PCI33_3;
+#NET "pci_gnt_n[2]" IOSTANDARD = PCI33_3;
+#
+#NET "pci_req_n[0]" LOC = AD1;
+NET "pci_req_n<*>" IOSTANDARD = PCI33_3;
+#NET "pci_req_n[1]" LOC = AD2;
+#NET "pci_req_n[1]" IOSTANDARD = PCI33_3;
 
-NET "pci_req_n[0]" LOC = AD1;
-NET "pci_req_n[0]" IOSTANDARD = PCI33_3;
-NET "pci_req_n[1]" LOC = AD2;
-NET "pci_req_n[1]" IOSTANDARD = PCI33_3;
+NET "pci_int_a" IOSTANDARD = PCI33_3;
+NET "pci_int_b" IOSTANDARD = PCI33_3;
+NET "pci_int_c" IOSTANDARD = PCI33_3;
+NET "pci_int_d" IOSTANDARD = PCI33_3;
+
 
 #NET  "pci_inta_n"		LOC = "y1"		| IOSTANDARD = PCI33_3;
 #NET  "pci_intb_n"		LOC = "y2"		| IOSTANDARD = PCI33_3;
@@ -161,368 +837,174 @@ NET "pci_req_n[1]" IOSTANDARD = PCI33_3;
 #NET  "pci_p_clk0_r"	LOC = "ac2"		| IOSTANDARD = PCI33_3;
 #NET  "pci_p_clk1_r"	LOC = "ac3"		| IOSTANDARD = PCI33_3;
 
-NET "pci_clk" LOC = P3;
-NET "pci_clk" IOSTANDARD = LVCMOS33;
+NET "pci_clk" LOC = P3 | IOSTANDARD = LVCMOS33;
+#NET "pci_clk" TNM_NET = "sys_clk_pci_feedback";
+#TIMESPEC TS_sys_clk_pci_feedback = PERIOD "sys_clk_pci_feedback" 33 MHz HIGH 50 %;
+#NET "pci_clk" IOSTANDARD = LVCMOS33;
+NET "pci_clk" PERIOD = 30.000;
 
-NET "pci_clk" TNM_NET = "sys_clk_pci_feedback";
-TIMESPEC TS_sys_clk_pci_feedback = PERIOD "sys_clk_pci_feedback" 33 MHz HIGH 50 %;
+NET "pci_clk_p[0]" LOC = H2 | IOSTANDARD = PCI33_3;
+NET "pci_clk_p[1]" LOC = M1 | IOSTANDARD = PCI33_3;
+NET "pci_clk_p[2]" LOC = P4 | IOSTANDARD = PCI33_3;
+NET "pci_clk_p[3]" LOC = R2 | IOSTANDARD = PCI33_3;
 
-
-
-
-NET "ps2_clk_0" IOSTANDARD = LVCMOS33;
-NET "ps2_data_0" IOSTANDARD = LVCMOS33;
-NET "ps2_clk_1" IOSTANDARD = LVCMOS33;
-NET "ps2_data_1" IOSTANDARD = LVCMOS33;
+####################
+### PS/2 Signals ###
+####################
+NET "ps2_clk_0" IOSTANDARD = LVCMOS33 | DRIVE = 2 | SLEW = SLOW;
+NET "ps2_data_0" IOSTANDARD = LVCMOS33 | DRIVE = 2 | SLEW = SLOW;
+NET "ps2_clk_1" IOSTANDARD = LVCMOS33 | DRIVE = 2 | SLEW = SLOW;
+NET "ps2_data_1" IOSTANDARD = LVCMOS33 | DRIVE = 2 | SLEW = SLOW;
 
 #######################
 ### 100M Ethernet 0 ###
 #######################
-NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[0]" LOC = A3;
-NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[0]" IOSTANDARD = LVCMOS25;
-NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[1]" LOC = A4;
-NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[1]" IOSTANDARD = LVCMOS25;
-NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[2]" LOC = B3;
-NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[2]" IOSTANDARD = LVCMOS25;
-NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[3]" LOC = B4;
-NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[3]" IOSTANDARD = LVCMOS25;
-NET "fpga_0_Soft_TEMAC_MII_TX_EN_0_pin" LOC = C5;
-NET "fpga_0_Soft_TEMAC_MII_TX_EN_0_pin" IOSTANDARD = LVCMOS25;
-NET "fpga_0_Soft_TEMAC_MII_TX_ER_0_pin" LOC = B6;
-NET "fpga_0_Soft_TEMAC_MII_TX_ER_0_pin" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[0]" LOC = D7;
-NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[0]" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[1]" LOC = J10;
-NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[1]" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[2]" LOC = E11;
-NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[2]" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[3]" LOC = G11;
-NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[3]" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_0_Soft_TEMAC_MII_RX_DV_0_pin" LOC = D12;
-NET "fpga_0_Soft_TEMAC_MII_RX_DV_0_pin" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_0_Soft_TEMAC_MII_RX_ER_0_pin" LOC = A13;
-NET "fpga_0_Soft_TEMAC_MII_RX_ER_0_pin" IOSTANDARD = LVCMOS25;
-NET "fpga_0_Soft_TEMAC_MDC_0_pin" LOC = D6;
-NET "fpga_0_Soft_TEMAC_MDC_0_pin" IOSTANDARD = LVCMOS25;
-NET "fpga_0_Soft_TEMAC_TemacPhy_RST_n_pin" LOC = B7;
-NET "fpga_0_Soft_TEMAC_TemacPhy_RST_n_pin" IOSTANDARD = LVCMOS25;
-NET "fpga_0_Soft_TEMAC_MDIO_0" LOC = C7;
-NET "fpga_0_Soft_TEMAC_MDIO_0" IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[0]" 		LOC = A3 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[1]" 		LOC = A4 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[2]" 		LOC = B3 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_TXD_0_pin[3]" 		LOC = B4 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_TX_EN_0_pin" 		LOC = C5  	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_TX_ER_0_pin" 		LOC = B6  	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[0]" 		LOC = D7  	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[1]" 		LOC = J10 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[2]" 		LOC = E11 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_RXD_0_pin[3]" 		LOC = G11 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_RX_DV_0_pin" 		LOC = D12 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_RX_ER_0_pin" 		LOC = A13 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MDC_0_pin" 				LOC = D6 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_TemacPhy_RST_n_pin" 	LOC = B7 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MDIO_0" 					LOC = C7 	| IOSTANDARD = LVCMOS25;
 
-NET "fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin" IOSTANDARD = LVCMOS25;
-NET "fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin" IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin" 		LOC = AF14 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin" 		LOC = AE14 	| IOSTANDARD = LVCMOS25;
+NET "fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin" PERIOD = 40.000 ;
+NET "fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin" PERIOD = 40.000 ;
+
 #######################
 ### 100M Ethernet 1 ###
 #######################
-NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[0]" LOC = E7;
-NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[0]" IOSTANDARD = LVCMOS25;
-NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[1]" LOC = F7;
-NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[1]" IOSTANDARD = LVCMOS25;
-NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[2]" LOC = A8;
-NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[2]" IOSTANDARD = LVCMOS25;
-NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[3]" LOC = B8;
-NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[3]" IOSTANDARD = LVCMOS25;
-NET "fpga_1_Soft_TEMAC_MII_TX_EN_0_pin" LOC = C8;
-NET "fpga_1_Soft_TEMAC_MII_TX_EN_0_pin" IOSTANDARD = LVCMOS25;
-NET "fpga_1_Soft_TEMAC_MII_TX_ER_0_pin" LOC = D8;
-NET "fpga_1_Soft_TEMAC_MII_TX_ER_0_pin" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[0]" LOC = H13;
-NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[0]" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[1]" LOC = J13;
-NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[1]" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[2]" LOC = D14;
-NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[2]" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[3]" LOC = G14;
-NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[3]" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_1_Soft_TEMAC_MII_RX_DV_0_pin" LOC = J15;
-NET "fpga_1_Soft_TEMAC_MII_RX_DV_0_pin" IOSTANDARD = LVCMOS25;
-#input
-NET "fpga_1_Soft_TEMAC_MII_RX_ER_0_pin" LOC = A17;
-NET "fpga_1_Soft_TEMAC_MII_RX_ER_0_pin" IOSTANDARD = LVCMOS25;
-NET "fpga_1_Soft_TEMAC_MDC_0_pin" LOC = F8;
-NET "fpga_1_Soft_TEMAC_MDC_0_pin" IOSTANDARD = LVCMOS25;
-NET "fpga_1_Soft_TEMAC_TemacPhy_RST_n_pin" LOC = G8;
-NET "fpga_1_Soft_TEMAC_TemacPhy_RST_n_pin" IOSTANDARD = LVCMOS25;
-NET "fpga_1_Soft_TEMAC_MDIO_0" LOC = A9;
-NET "fpga_1_Soft_TEMAC_MDIO_0" IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[0]" 		LOC = E7 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[1]" 		LOC = F7 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[2]" 		LOC = A8 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_TXD_0_pin[3]" 		LOC = B8 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_TX_EN_0_pin" 		LOC = C8 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_TX_ER_0_pin" 		LOC = D8 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[0]" 		LOC = H13 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[1]" 		LOC = J13 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[2]" 		LOC = D14 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_RXD_0_pin[3]" 		LOC = G14 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_RX_DV_0_pin" 		LOC = J15 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_RX_ER_0_pin" 		LOC = A17 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MDC_0_pin" 				LOC = F8 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_TemacPhy_RST_n_pin" 	LOC = G8 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MDIO_0" 					LOC = A9 	| IOSTANDARD = LVCMOS25;
 
-NET "fpga_1_Soft_TEMAC_MII_TX_CLK_0_pin" IOSTANDARD = LVCMOS25;
-NET "fpga_1_Soft_TEMAC_MII_RX_CLK_0_pin" IOSTANDARD = LVCMOS25;
-#
-#
-##### Module Soft_Ethernet_MAC constraints
-#
-## This is a MII system
-## GTX_CLK_0 == 125MHz clock from clock generator
-## LlinkTemac0_CLK = SPLB_Clk == 50MHz clock from clock generator
-## Rx/Tx Client clocks are Rx/Tx PHY clocks so CORE Gen PHY clock constraints propagate to Rx/Tx client clock periods
-## Time domain crossing constraints (DATAPATHONLY) are set for maximum bus frequency
-## allowed by IP which is the maximum option in BSB. For lower bus frequency choice in BSB,
-## the constraints are over constrained. Relaxing them for your system may reduce build time.
-#
-##REFCLK TMN_NET needed when statistics module is included
-##NET "*/REFCLK"                     TNM_NET = "REFCLK"; #name of signal connected to TEMAC REFCLK input
-##name of signal connected to TEMAC SPLB_Clk input
-#NET "*/SPLB_Clk*" TNM_NET = "PLBCLK";
-##name of signal connected to TEMAC LlinkTemac0_CLK input
-#NET "*/LlinkTemac0_CLK*" TNM_NET = "LLCLK0";
-#
-## PLBCLK = LLink clock, so this is a duplicate of TS_LL_CLK0_2_TX_CLIENT_CLK0
-##TIMESPEC TS_PLB_2_TXPHY0 = FROM PLBCLK      TO clk_phy_tx0 40000 ps DATAPATHONLY; #constant value based on Ethernet clock
-## PLBCLK = LLink clock, so this is a duplicate of TS_RX_CLIENT_CLK0_2_LL_CLK0
-##TIMESPEC TS_RXPHY0_2_PLB = FROM phy_clk_rx0 TO PLBCLK      11111 ps DATAPATHONLY; #varies based on period of PLB clock
-#
-## Starting at v2.00.a Dual port BRAM for Rx-side LLink to RX-client timedomain crossing, so no paths analyzed
-##constant value based on Ethernet clock
-#TIMESPEC TS_LL_CLK0_2_RX_CLIENT_CLK0 = FROM "LLCLK0" TO "clk_rx" 40000 ps DATAPATHONLY;
-## Asynch fifo for Tx-side LLink to TX-client timedomain crossing LLink, so no paths analyzed
-##constant value based on Ethernet clock
-#TIMESPEC TS_LL_CLK0_2_TX_CLIENT_CLK0 = FROM "LLCLK0" TO "clk_tx_mii" 40000 ps DATAPATHONLY;
-##varies based on period of LocalLink clock
-#TIMESPEC TS_RX_CLIENT_CLK0_2_LL_CLK0 = FROM "clk_rx" TO "LLCLK0" 11111 ps DATAPATHONLY;
-##varies based on period of LocalLink clock
-#TIMESPEC TS_TX_CLIENT_CLK0_2_LL_CLK0 = FROM "clk_tx_mii" TO "LLCLK0" 11111 ps DATAPATHONLY;
-#
-## REFCLK constraints are commented out since there are not any REFCLK domain crossings in this design
-## These constraints would be needed in this design if TEMAC Statistics were enabled
-##TIMESPEC "TS_REF_CLK_2_PLB_CLIENT_CLK"  = FROM REFCLK TO PLBCLK 11111 ps DATAPATHONLY; #varies based on period of PLB clock
-##TIMESPEC "TS_PLB_CLIENT_CLK_2_REF_CLK"  = FROM PLBCLK TO REFCLK  5000 ps DATAPATHONLY; #constant value based on constant 200 MHZ ref clock
-##
-##TIMESPEC "TS_REF_CLK_2_TX_CLIENT_CLK0"  = FROM REFCLK TO clk_tx_mii 40000 ps DATAPATHONLY; #constant value based on Ethernet clock
-##TIMESPEC "TS_TX_CLIENT_CLK0_2_REF_CLK"  = FROM clk_tx_mii TO REFCLK 5000 ps DATAPATHONLY; #constant value based on constant 200 MHZ ref clock
-##
-##TIMESPEC "TS_REF_CLK_2_RX_CLIENT_CLK0"  = FROM REFCLK TO clk_rx 40000 ps DATAPATHONLY; #constant value based on Ethernet clock
-##TIMESPEC "TS_RX_CLIENT_CLK0_2_REF_CLK"  = FROM clk_rx TO REFCLK 5000 ps DATAPATHONLY; #constant value based on constant 200 MHZ ref clock
-#
-##Start from CoreGen output with xps core name changes
-#############################################################
-## Clock Period Constraints                                 #
-#############################################################
-#
-#############################################################
-## RX Clock period Constraints                              #
-#############################################################
-## Receiver clock period constraints: please do not relax
-## Changed net name with PIN name
-#NET "fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin" TNM_NET = "clk_rx";
-##NET "fpga_0_Soft_TEMAC_MII_MII_RX_CLK_0_pin"  TNM_NET  = "clk_rx";
-#TIMEGRP rx_clock =  "clk_rx";
-#TIMESPEC TS_rx_clk = PERIOD "rx_clock" 40000 ps HIGH 50 %;
-#
-#############################################################
-## TX Clock period Constraints                              #
-#############################################################
-## Transmitter clock period constraints: please do not relax
-## Changed net name in synthesis of xps_ll_temac
-#NET "*tx_gmii_mii_clk*" TNM_NET = "clk_tx_mii";
-#TIMEGRP tx_clock_mii =  "clk_tx_mii";
-#TIMESPEC TS_tx_clk_mii = PERIOD "tx_clock_mii" 40000 ps HIGH 50 %;
-#
-#############################################################
-## Host Clock period Constraint                             #
-#############################################################
-## Management Clock period constraints: relax as required
-## This will be analyzed by LlinkTemac0_CLK = SPLB_Clk period constraint from clock generator
-## The TIMEGRP is needed for other constraints
-## Changed net name in synthesis of xps_ll_temac
-#NET "*/SPLB_Clk*" TNM_NET = "host_clk";
-#TIMEGRP host =  "host_clk" EXCEPT  "mdio_logic";
-##TIMESPEC "TS_host_clk"     = PERIOD "host" 11111 ps HIGH 50 %; #varies based on period of PLB clock
-#
-#############################################################
-## External MII Constraints                                #
-#############################################################
-#
-## IOB = true changed to force
-## MII Transmitter Constraints:  place flip-flops in IOB
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_txd_0" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_txd_1" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_txd_2" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_txd_3" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_txd_0" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_txd_1" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_txd_2" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_txd_3" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_tx_en" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_tx_en" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_tx_er" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/mii_tx_er" IOB =FORCE;
-#
-## IOB = true changed to force
-## MII Receiver Constraints:  place flip-flops in IOB
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rxd_to_mac_0" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rxd_to_mac_1" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rxd_to_mac_2" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rxd_to_mac_3" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rxd_to_mac_0" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rxd_to_mac_1" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rxd_to_mac_2" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rxd_to_mac_3" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rx_dv_to_mac" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rx_dv_to_mac" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rx_er_to_mac" IOB =FORCE;
-#INST "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.MII_INTERFACE_0/rx_er_to_mac" IOB =FORCE;
-#
-#############################################################
-## For Setup and Hold time analysis on MII inputs          #
-#############################################################
-#
-## Identify MII Rx Pads only.  
-## This prevents setup/hold analysis being performed on false inputs,
-## eg, the configuration_vector inputs.
-##INST "mii_rxd<?>"                      TNM = IN_MII; 
-##INST "mii_rx_dv"                       TNM = IN_MII;
-##INST "mii_rx_er"                       TNM = IN_MII;
-#
-## Define data valid window with respect to the clock.
-## The spec states that, worst case, the data is valid 10 ns before the clock edge.
-## The worst case it to provide 10 ns hold time (a 20 ns window in total)
-##TIMEGRP "IN_MII" OFFSET         = IN  10 ns VALID 20 ns BEFORE "mii_rx_clk"; 
-## Change to global OFFSET IN constraint
-#OFFSET = IN 10 ns VALID 20 ns BEFORE "fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin";
-##OFFSET = IN 10 ns VALID 20 ns BEFORE "fpga_0_Soft_TEMAC_MII_MII_RX_CLK_0_pin";
-#
-#############################################################
-## Reset path constraints                                   #
-##  These constraints add a measure of protection against   #
-##  metastability and skew in the reset nets.               #
-#############################################################
-## Changed net name in synthesis of xps_ll_temac
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/RXGMIIRSTGENEN.I_SYNC_GMII_MII_RX_RESET_I/RESET_OUT" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/RXGMIIRSTGENEN.I_SYNC_GMII_MII_RX_RESET_I/RESET_OUT" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift1" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift10" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift2" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift3" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift4" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift5" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift6" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift7" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift8" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift9" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift1" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift10" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift2" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift3" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift4" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift5" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift6" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift7" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift8" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT_shift9" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_0/xps_ll_temac_0/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/G_SYNC_MGMT_RESET.I_SYNC_MGMT_RESET_HOST_I/RESET_OUT" MAXDELAY = 6100 ps;
-#NET "inst_microblaze_systems/xps_ll_temac_1/xps_ll_temac_1/SOFT_SYS.I_TEMAC/MII0.I_TRIMAC_CORE_0/I_TRIMAC_INST/G_SYNC_MGMT_RESET.I_SYNC_MGMT_RESET_HOST_I/RESET_OUT" MAXDELAY = 6100 ps;
-#
-#############################################################
-## Crossing of Clock Domain Constraints: please do not edit #
-#############################################################
-## Changed net name in synthesis of xps_ll_temac
-## Flow Control logic reclocking - control signal is synchronised
-#INST "*/I_TRIMAC_INST/I_FLOW/I_RX_PAUSE/PAUSE_REQ_TO_TX" TNM = "flow_rx_to_tx";
-#INST "*/I_TRIMAC_INST/I_FLOW/I_RX_PAUSE/PAUSE_VALUE_TO_TX*" TNM = "flow_rx_to_tx";
-#TIMESPEC TS_flow_rx_to_tx = FROM "flow_rx_to_tx" TO "tx_clock_mii" 40000 ps DATAPATHONLY;
-#
-## generate a group of all flops NOT in the host clock domain
-#TIMEGRP all_ffs =   FFS;
-#TIMEGRP ffs_except_host =  "all_ffs" EXCEPT  "host";
-#
-## Changed net name in synthesis of xps_ll_temac
-## Configuration Register reclocking
-#INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/RX0_OUT*" TNM = "async_config";
-#INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/RX1_OUT*" TNM = "async_config";
-#INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/FC_OUT_29" TNM = "async_config";
-#
-#INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/TX_OUT*" TNM = "async_config";
-#INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/FC_OUT_30" TNM = "async_config";
-#
-## Changed net name in synthesis of xps_ll_temac
-## speed change config
-#INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/CNFG_SPEED*" TNM = "async_config";
-#INST "*/I_TRIMAC_INST/I_?XGEN/*SPEED*" TNM = "async_config";
-#
-#TIMESPEC TS_host_clk_to_rx_clk = FROM "host" TO "rx_clock" TIG ;
-#TIMESPEC TS_host_clk_to_tx_clk = FROM "host" TO "tx_clock_mii" TIG ;
-#
-#TIMESPEC TS_config_to_all = FROM "async_config" TO "ffs_except_host" TIG ;
-#
-## Changed net name in synthesis of xps_ll_temac
-## Address filter specific cross clocking
-#INST "*/I_TRIMAC_INST/I_ADDR_FILTER_TOP/dynamic_af_gen.I_DYNAMIC_CONFIG/unicast_addr_*" TNM = "addr_config_to_rx";
-#TIMESPEC TS_addr_config_to_rx = FROM "addr_config_to_rx" TO "ffs_except_host" TIG ;
-#
-#############################################################
-## Ignore paths to resync flops
-#############################################################
-#INST "*data_sync" TNM = "resync_reg";
-#TIMESPEC ts_resync_flops = TO "resync_reg" TIG ;
-#
-#
-##Not defined in CoreGen output and not analyzed
-##TIMESPEC "ts_tx_async_regs"      = TO "tx_async_reg" TIG;
-#
-#
-#############################################################
-## MDIO Constraints: please do not edit                     #
-#############################################################
-#
-#
-## Changed net name in synthesis of xps_ll_temac
-## Place the MDIO logic in it's own timing groups
-#INST "*I_TEMAC*MII*I_TRIMAC_CORE_0*I_TRIMAC_INST*I_RXGEN*ENABLE_REG" TNM = "mdc_falling";
-##INST "*I_TEMAC*MII*I_TRIMAC_CORE_0*I_TRIMAC_INST*MANIFGEN*I_MANAGEN*MIIM_READY_INT"     TNM = "mdc_rising";
-##INST "*I_TEMAC*MII*I_TRIMAC_CORE_0*I_TRIMAC_INST*MANIFGEN*I_MANAGEN*I_PHY*STATE_COUNT*"  TNM = FFS "mdc_rising";
-##INST "*I_TEMAC*MII*I_TRIMAC_CORE_0*I_TRIMAC_INST*MANIFGEN*I_MANAGEN*I_PHY*MDIO_TRISTATE" TNM = "mdc_falling";
-##INST "*I_TEMAC*MII*I_TRIMAC_CORE_0*I_TRIMAC_INST*MANIFGEN*I_MANAGEN*I_PHY/MDIO_OUT"      TNM = "mdc_falling";
-#
-#TIMEGRP mdio_logic =  "mdc_rising" "mdc_falling";
-#
-#TIMESPEC TS_mdio1 = PERIOD "mdio_logic" 400 ns;
-#TIMESPEC TS_mdio2 = FROM "mdc_rising" TO "mdc_falling" 200 ns;
-#TIMESPEC TS_mdio3 = FROM "mdio_logic" TO "host" TS_sys_clk_pin ;
-#TIMESPEC TS_mdio4 = FROM "host" TO "mdio_logic" TS_sys_clk_pin ;
-#
-#
-#
+NET "fpga_1_Soft_TEMAC_MII_TX_CLK_0_pin" 		LOC = AA14 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_RX_CLK_0_pin" 		LOC = Y14 	| IOSTANDARD = LVCMOS25;
+NET "fpga_1_Soft_TEMAC_MII_RX_CLK_0_pin" PERIOD = 40.000 ;
+NET "fpga_1_Soft_TEMAC_MII_TX_CLK_0_pin" PERIOD = 40.000 ;
 
+NET "*/SPLB_Clk*"                  TNM_NET = "PLBCLK"; #name of signal connected to TEMAC SPLB_Clk input
+NET "*/LlinkTemac0_CLK*"           TNM_NET = "LLCLK0"; #name of signal connected to TEMAC LlinkTemac0_CLK input
+TIMESPEC "TS_LL_CLK0_2_RX_CLIENT_CLK0"  = FROM LLCLK0 TO clk_rx 40000 ps DATAPATHONLY; #constant value based on Ethernet clock
+# Asynch fifo for Tx-side LLink to TX-client timedomain crossing LLink, so no paths analyzed
+TIMESPEC "TS_LL_CLK0_2_TX_CLIENT_CLK0"  = FROM LLCLK0 TO clk_tx_mii 40000 ps DATAPATHONLY; #constant value based on Ethernet clock
+TIMESPEC "TS_RX_CLIENT_CLK0_2_LL_CLK0"  = FROM clk_rx TO LLCLK0 11111 ps DATAPATHONLY; #varies based on period of LocalLink clock
+TIMESPEC "TS_TX_CLIENT_CLK0_2_LL_CLK0"  = FROM clk_tx_mii TO LLCLK0 11111 ps DATAPATHONLY; #varies based on period of LocalLink clock
+
+NET "fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin"  TNM_NET  = "clk_rx";
+TIMEGRP "rx_clock"                        = "clk_rx";
+TIMESPEC "TS_rx_clk"       = PERIOD "rx_clock" 40000 ps HIGH 50 %;
+
+# Changed net name in synthesis of xps_ll_temac
+NET "*/SPLB_Clk*"          TNM_NET    = "host_clk";
+TIMEGRP "host"             = "host_clk" EXCEPT "mdio_logic";
+
+INST "*mii_txd*"                       IOB = force;
+INST "*mii_tx_en"                      IOB = force;
+INST "*mii_tx_er"                      IOB = force;
+INST "*rxd_to_mac*"                    IOB = force;
+INST "*rx_dv_to_mac"                   IOB = force;
+INST "*rx_er_to_mac"                   IOB = force;
+
+OFFSET = IN 10 ns VALID 20 ns BEFORE "fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin";
+NET "*/I_TRIMAC_INST/RXGMIIRSTGENEN.I_SYNC_GMII_MII_RX_RESET_I/RESET_OUT*"  MAXDELAY = 6100 ps;
+NET "*/I_TRIMAC_INST/I_SYNC_GMII_MII_TX_RESET_I/RESET_OUT*"                 MAXDELAY = 6100 ps;
+NET "*/I_TRIMAC_INST/G_SYNC_MGMT_RESET.I_SYNC_MGMT_RESET_HOST_I/RESET_OUT*" MAXDELAY = 6100 ps;
+
+INST "*/I_TRIMAC_INST/I_FLOW/I_RX_PAUSE/PAUSE_REQ_TO_TX"       TNM="flow_rx_to_tx";
+INST "*/I_TRIMAC_INST/I_FLOW/I_RX_PAUSE/PAUSE_VALUE_TO_TX*"    TNM="flow_rx_to_tx";
+TIMESPEC "TS_flow_rx_to_tx"      = FROM "flow_rx_to_tx" TO tx_clock_mii 40000 ps DATAPATHONLY;
+
+# generate a group of all flops NOT in the host clock domain
+TIMEGRP "all_ffs"                = FFS;
+TIMEGRP "ffs_except_host"        = "all_ffs" EXCEPT "host";
+
+# Changed net name in synthesis of xps_ll_temac
+# Configuration Register reclocking
+INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/RX0_OUT*"            TNM="async_config";
+INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/RX1_OUT*"            TNM="async_config";
+INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/FC_OUT_29"           TNM="async_config";
+
+INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/TX_OUT*"             TNM="async_config";
+INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/FC_OUT_30"           TNM="async_config";
+
+# Changed net name in synthesis of xps_ll_temac
+# speed change config
+INST "*/I_TRIMAC_INST/MANIFGEN.I_MANAGEN/I_CONF/CNFG_SPEED*"         TNM="async_config";
+INST "*/I_TRIMAC_INST/I_?XGEN/*SPEED*"                               TNM="async_config";
+
+TIMESPEC "TS_host_clk_to_rx_clk" = FROM "host" TO "rx_clock" TIG;
+TIMESPEC "TS_host_clk_to_tx_clk" = FROM "host" TO "tx_clock_mii" TIG;
+
+TIMESPEC "TS_config_to_all"      = FROM "async_config" TO "ffs_except_host" TIG;
+
+# Changed net name in synthesis of xps_ll_temac
+# Address filter specific cross clocking
+INST "*/I_TRIMAC_INST/I_ADDR_FILTER_TOP/dynamic_af_gen.I_DYNAMIC_CONFIG/unicast_addr_*" TNM="addr_config_to_rx";
+TIMESPEC "TS_addr_config_to_rx" = FROM "addr_config_to_rx" TO "ffs_except_host" TIG;
+
+############################################################
+# Ignore paths to resync flops
+############################################################
+INST "*data_sync"                      TNM = "resync_reg";
+TIMESPEC "ts_resync_flops"       = TO "resync_reg" TIG;
+
+
+#Not defined in CoreGen output and not analyzed
+#TIMESPEC "ts_tx_async_regs"      = TO "tx_async_reg" TIG;
+
+
+############################################################
+# MDIO Constraints: please do not edit                     #
+############################################################
+
+
+# Changed net name in synthesis of xps_ll_temac
+# Place the MDIO logic in it's own timing groups
+INST "*xps_ll_temac_0*I_RXGEN*ENABLE_REG"    TNM = "mdc_falling";
+INST "*xps_ll_temac_0*MANIFGEN*I_MANAGEN*MIIM_READY_INT"     TNM = "mdc_rising";
+INST "*xps_ll_temac_0*MANIFGEN*I_MANAGEN*I_PHY*STATE_COUNT*"  TNM = FFS "mdc_rising";
+INST "*xps_ll_temac_0*MANIFGEN*I_MANAGEN*I_PHY*MDIO_TRISTATE" TNM = "mdc_falling";
+INST "*xps_ll_temac_0*MANIFGEN*I_MANAGEN*I_PHY/MDIO_OUT"      TNM = "mdc_falling";
+
+TIMEGRP "mdio_logic" = "mdc_rising" "mdc_falling";
+
+TIMESPEC "TS_mdio1" = PERIOD "mdio_logic" 400 ns;
+TIMESPEC "TS_mdio2" = FROM "mdc_rising" TO "mdc_falling" 200 ns; 
+TIMESPEC "TS_mdio3" = FROM "mdio_logic" TO "host" "TS_sys_clk_pin";
+TIMESPEC "TS_mdio4" = FROM "host" TO "mdio_logic" "TS_sys_clk_pin"; 
 
 ############################
 ### MicroSD Card Signals ###
 ############################
-NET "mmc_cmd" LOC = F2;
-NET "mmc_cmd" IOSTANDARD = LVCMOS33;
-NET "mmc_cmd" PULLUP;
-NET "mmc_data[0]" LOC = F4;
-NET "mmc_data[0]" IOSTANDARD = LVCMOS33;
-NET "mmc_data[0]" PULLUP;
-NET "mmc_data[1]" LOC = F5;
-NET "mmc_data[1]" IOSTANDARD = LVCMOS33;
-NET "mmc_data[1]" PULLUP;
-NET "mmc_data[2]" LOC = E4;
-NET "mmc_data[2]" IOSTANDARD = LVCMOS33;
-NET "mmc_data[2]" PULLUP;
-NET "mmc_data[3]" LOC = E3;
-NET "mmc_data[3]" IOSTANDARD = LVCMOS33;
-NET "mmc_data[3]" PULLUP;
-NET "mmc_clk" LOC = F3;
-NET "mmc_clk" IOSTANDARD = LVCMOS33;
-
-INST "inst_microblaze_systems/microblaze_0" AREA_GROUP = "pblock_1";
-AREA_GROUP "pblock_1" RANGE=SLICE_X52Y127:SLICE_X115Y0;
-AREA_GROUP "pblock_1" RANGE=DSP48A_X3Y0:DSP48A_X4Y15;
-AREA_GROUP "pblock_1" RANGE=RAMB16_X3Y0:RAMB16_X4Y15;
+NET "mmc_cmd" 		LOC = F2 | IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "mmc_data[0]" LOC = F4 | IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "mmc_data[1]" LOC = F5 | IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "mmc_data[2]" LOC = E4 | IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "mmc_data[3]" LOC = E3 | IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "mmc_clk" 		LOC = F3 | IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
+NET "mmc_cd"		LOC = C1 | IOSTANDARD = LVCMOS33 | TIG;
 
 ##############################################################################################################
 ##
@@ -552,7 +1034,8 @@ AREA_GROUP "pblock_1" RANGE=RAMB16_X3Y0:RAMB16_X4Y15;
 ##############################################################################################################
 ## Clock constraints                                                        
 ##############################################################################################################
-# The constraint below commented out because it is a global clock constraint that should be inherited from the EDK system level UCF.#NET "*/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/infrastructure/sys_clk_ibuf" TNM_NET = "SYS_CLK";
+# The constraint below commented out because it is a global clock constraint that should be inherited from the EDK system level UCF.
+#NET "*/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/infrastructure/sys_clk_ibuf" TNM_NET = "SYS_CLK";
 #TIMESPEC "TS_SYS_CLK" = PERIOD "SYS_CLK"  6.667000  ns HIGH 50 %;
 ##############################################################################################################
 
@@ -811,8 +1294,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/infrastructure/cal_top/tap_dly/gen_no_sim.l30" BEL = G;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/infrastructure/cal_top/tap_dly/gen_no_sim.l31" BEL = F;
 
-
-
 ##############################################################################################################
 ## RLOC Origin constraint for LUT delay calibration chain.
 ##############################################################################################################
@@ -893,8 +1374,6 @@ NET "mpmc_0_DDR2_DM_pin[2]" IOSTANDARD = SSTL18_II;
 NET "mpmc_0_DDR2_DM_pin[3]" IOSTANDARD = SSTL18_II;
 NET "mpmc_0_DDR2_DQS_Div_I_pin" IOSTANDARD = SSTL18_II;
 NET "mpmc_0_DDR2_DQS_Div_O_pin" IOSTANDARD = SSTL18_II;
-# The constraint below commented out because it is a global clock constraint that should be inherited from the EDK system level UCF.#NET  "sys_clk_in"                               IOSTANDARD = LVCMOS18;
-#NET  "reset_in_n"                               IOSTANDARD = LVCMOS18;
 NET "mpmc_0_DDR2_DQS[0]" IOSTANDARD = DIFF_SSTL18_II;
 NET "mpmc_0_DDR2_DQS[1]" IOSTANDARD = DIFF_SSTL18_II;
 NET "mpmc_0_DDR2_DQS[2]" IOSTANDARD = DIFF_SSTL18_II;
@@ -908,78 +1387,40 @@ NET "mpmc_0_DDR2_Clk_pin[1]" IOSTANDARD = DIFF_SSTL18_II;
 NET "mpmc_0_DDR2_Clk_n_pin[0]" IOSTANDARD = DIFF_SSTL18_II;
 NET "mpmc_0_DDR2_Clk_n_pin[1]" IOSTANDARD = DIFF_SSTL18_II;
 
-
-##############################################################################################################
-# Pin Location Constraints for System clock signals
-##############################################################################################################
-# The constraint below commented out because it is a global clock constraint that should be inherited from the EDK system level UCF.#NET  "sys_clk_in"                                 LOC = "C13" ;     #bank 0
-
 ##############################################################################################################
 # Pin Location Constraints for Clock,Masks, Address, and Controls 
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_Clk_pin[0]" LOC = H20;
-#bank 1
 NET "mpmc_0_DDR2_Clk_n_pin[0]" LOC = G21;
-#bank 1
 NET "mpmc_0_DDR2_Clk_pin[1]" LOC = C26;
-#bank 1
 NET "mpmc_0_DDR2_Clk_n_pin[1]" LOC = C25;
-#bank 1
 NET "mpmc_0_DDR2_DM_pin[0]" LOC = F23;
-#bank 1
 NET "mpmc_0_DDR2_DM_pin[1]" LOC = J21;
-#bank 1
 NET "mpmc_0_DDR2_DM_pin[2]" LOC = H21;
-#bank 1
 NET "mpmc_0_DDR2_DM_pin[3]" LOC = P18;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[13]" LOC = P23;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[12]" LOC = N24;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[11]" LOC = P26;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[10]" LOC = P25;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[9]" LOC = P21;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[8]" LOC = P20;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[7]" LOC = R18;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[6]" LOC = R17;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[5]" LOC = T23;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[4]" LOC = T24;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[3]" LOC = R21;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[2]" LOC = R22;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[1]" LOC = R19;
-#bank 1
 NET "mpmc_0_DDR2_Addr_pin[0]" LOC = R20;
-#bank 1
 NET "mpmc_0_DDR2_BankAddr_pin[2]" LOC = V23;
-#bank 1
 NET "mpmc_0_DDR2_BankAddr_pin[1]" LOC = U22;
-#bank 1
 NET "mpmc_0_DDR2_BankAddr_pin[0]" LOC = V24;
-#bank 1
 NET "mpmc_0_DDR2_CE_pin" LOC = V25;
-#bank 1
 NET "mpmc_0_DDR2_CS_n_pin" LOC = W23;
-#bank 1
 NET "mpmc_0_DDR2_RAS_n_pin" LOC = V22;
-#bank 1
 NET "mpmc_0_DDR2_CAS_n_pin" LOC = T18;
-#bank 1
 NET "mpmc_0_DDR2_WE_n_pin" LOC = T17;
-#bank 1
 NET "mpmc_0_DDR2_ODT_pin" LOC = Y24;
-#NET  "reset_in_n"                                 LOC = "G8" ;     #bank 0
 
 ##############################################################################################################
 ## There is an issue with Xilinx ISE_DS 10.1 tool, default drive strength of LVCMOS18 for Spartan-3A 
@@ -1121,7 +1562,6 @@ NET "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 0, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[0]" LOC = D24;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0/gen_data[0]..u_fifo_bit" LOC = SLICE_X114Y164;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0_n/gen_data[0]..u_fifo_bit" LOC = SLICE_X114Y165;
@@ -1129,7 +1569,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 1, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[1]" LOC = D25;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0/gen_data[1]..u_fifo_bit" LOC = SLICE_X112Y164;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0_n/gen_data[1]..u_fifo_bit" LOC = SLICE_X112Y165;
@@ -1137,7 +1576,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 2, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[2]" LOC = D26;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0/gen_data[2]..u_fifo_bit" LOC = SLICE_X114Y162;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0_n/gen_data[2]..u_fifo_bit" LOC = SLICE_X114Y163;
@@ -1145,7 +1583,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 3, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[3]" LOC = E26;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0/gen_data[3]..u_fifo_bit" LOC = SLICE_X112Y162;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0_n/gen_data[3]..u_fifo_bit" LOC = SLICE_X112Y163;
@@ -1153,13 +1590,11 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQS_n, 0, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQS_n[0]" LOC = J20;
 
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQS, 0, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQS[0]" LOC = J19;
 
 ##############################################################################################################
@@ -1214,7 +1649,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 4, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[4]" LOC = G22;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0/gen_data[4]..u_fifo_bit" LOC = SLICE_X114Y156;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0_n/gen_data[4]..u_fifo_bit" LOC = SLICE_X114Y157;
@@ -1222,7 +1656,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 6, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[6]" LOC = K18;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0/gen_data[6]..u_fifo_bit" LOC = SLICE_X114Y154;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0_n/gen_data[6]..u_fifo_bit" LOC = SLICE_X114Y155;
@@ -1230,7 +1663,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 5, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[5]" LOC = K19;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0/gen_data[5]..u_fifo_bit" LOC = SLICE_X112Y154;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0_n/gen_data[5]..u_fifo_bit" LOC = SLICE_X112Y155;
@@ -1238,7 +1670,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 7, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[7]" LOC = E24;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0/gen_data[7]..u_fifo_bit" LOC = SLICE_X112Y152;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[0].gen_data_ram.strobe0_n/gen_data[7]..u_fifo_bit" LOC = SLICE_X112Y153;
@@ -1246,7 +1677,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 8, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[8]" LOC = L17;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0/gen_data[0]..u_fifo_bit" LOC = SLICE_X114Y148;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0_n/gen_data[0]..u_fifo_bit" LOC = SLICE_X114Y149;
@@ -1254,7 +1684,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 9, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[9]" LOC = L18;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0/gen_data[1]..u_fifo_bit" LOC = SLICE_X112Y148;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0_n/gen_data[1]..u_fifo_bit" LOC = SLICE_X112Y149;
@@ -1262,7 +1691,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 10, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[10]" LOC = F24;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0/gen_data[2]..u_fifo_bit" LOC = SLICE_X114Y146;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0_n/gen_data[2]..u_fifo_bit" LOC = SLICE_X114Y147;
@@ -1270,7 +1698,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 11, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[11]" LOC = F25;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0/gen_data[3]..u_fifo_bit" LOC = SLICE_X112Y146;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0_n/gen_data[3]..u_fifo_bit" LOC = SLICE_X112Y147;
@@ -1278,13 +1705,11 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQS_n, 1, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQS_n[1]" LOC = K20;
 
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQS, 1, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQS[1]" LOC = L20;
 
 ##############################################################################################################
@@ -1339,7 +1764,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 12, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[12]" LOC = G24;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0/gen_data[4]..u_fifo_bit" LOC = SLICE_X114Y140;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0_n/gen_data[4]..u_fifo_bit" LOC = SLICE_X114Y141;
@@ -1347,7 +1771,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 13, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[13]" LOC = G23;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0/gen_data[5]..u_fifo_bit" LOC = SLICE_X112Y140;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0_n/gen_data[5]..u_fifo_bit" LOC = SLICE_X112Y141;
@@ -1355,7 +1778,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 14, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[14]" LOC = K21;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0/gen_data[6]..u_fifo_bit" LOC = SLICE_X114Y138;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0_n/gen_data[6]..u_fifo_bit" LOC = SLICE_X114Y139;
@@ -1363,7 +1785,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 15, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[15]" LOC = L22;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0/gen_data[7]..u_fifo_bit" LOC = SLICE_X112Y138;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[1].gen_data_ram.strobe0_n/gen_data[7]..u_fifo_bit" LOC = SLICE_X112Y139;
@@ -1371,7 +1792,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 16, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[16]" LOC = M18;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0/gen_data[0]..u_fifo_bit" LOC = SLICE_X114Y132;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0_n/gen_data[0]..u_fifo_bit" LOC = SLICE_X114Y133;
@@ -1379,7 +1799,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 17, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[17]" LOC = M19;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0/gen_data[1]..u_fifo_bit" LOC = SLICE_X112Y132;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0_n/gen_data[1]..u_fifo_bit" LOC = SLICE_X112Y133;
@@ -1387,7 +1806,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 18, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[18]" LOC = K22;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0/gen_data[2]..u_fifo_bit" LOC = SLICE_X114Y130;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0_n/gen_data[2]..u_fifo_bit" LOC = SLICE_X114Y131;
@@ -1395,7 +1813,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 19, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[19]" LOC = K23;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0/gen_data[3]..u_fifo_bit" LOC = SLICE_X112Y130;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0_n/gen_data[3]..u_fifo_bit" LOC = SLICE_X112Y131;
@@ -1403,13 +1820,11 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQS_n, 2, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQS_n[2]" LOC = M22;
 
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQS, 2, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQS[2]" LOC = M21;
 
 ##############################################################################################################
@@ -1464,7 +1879,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 20, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[20]" LOC = J25;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0/gen_data[4]..u_fifo_bit" LOC = SLICE_X114Y124;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0_n/gen_data[4]..u_fifo_bit" LOC = SLICE_X114Y125;
@@ -1472,7 +1886,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 21, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[21]" LOC = J26;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0/gen_data[5]..u_fifo_bit" LOC = SLICE_X112Y124;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0_n/gen_data[5]..u_fifo_bit" LOC = SLICE_X112Y125;
@@ -1480,7 +1893,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 22, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[22]" LOC = M20;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0/gen_data[6]..u_fifo_bit" LOC = SLICE_X114Y122;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0_n/gen_data[6]..u_fifo_bit" LOC = SLICE_X114Y123;
@@ -1488,7 +1900,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 23, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[23]" LOC = N20;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0/gen_data[7]..u_fifo_bit" LOC = SLICE_X112Y122;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[2].gen_data_ram.strobe0_n/gen_data[7]..u_fifo_bit" LOC = SLICE_X112Y123;
@@ -1496,7 +1907,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 24, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[24]" LOC = K26;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0/gen_data[0]..u_fifo_bit" LOC = SLICE_X114Y120;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0_n/gen_data[0]..u_fifo_bit" LOC = SLICE_X114Y121;
@@ -1504,7 +1914,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 25, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[25]" LOC = K25;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0/gen_data[1]..u_fifo_bit" LOC = SLICE_X112Y120;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0_n/gen_data[1]..u_fifo_bit" LOC = SLICE_X112Y121;
@@ -1512,7 +1921,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 26, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[26]" LOC = N17;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0/gen_data[2]..u_fifo_bit" LOC = SLICE_X114Y116;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0_n/gen_data[2]..u_fifo_bit" LOC = SLICE_X114Y117;
@@ -1520,7 +1928,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 27, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[27]" LOC = N18;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0/gen_data[3]..u_fifo_bit" LOC = SLICE_X112Y116;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0_n/gen_data[3]..u_fifo_bit" LOC = SLICE_X112Y117;
@@ -1528,13 +1935,11 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQS_n, 3, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQS_n[3]" LOC = M23;
 
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQS, 3, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQS[3]" LOC = L24;
 
 ##############################################################################################################
@@ -1589,7 +1994,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 28, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[28]" LOC = N21;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0/gen_data[4]..u_fifo_bit" LOC = SLICE_X114Y112;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0_n/gen_data[4]..u_fifo_bit" LOC = SLICE_X114Y113;
@@ -1597,7 +2001,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 29, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[29]" LOC = P22;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0/gen_data[5]..u_fifo_bit" LOC = SLICE_X112Y112;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0_n/gen_data[5]..u_fifo_bit" LOC = SLICE_X112Y113;
@@ -1605,7 +2008,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 30, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[30]" LOC = M25;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0/gen_data[6]..u_fifo_bit" LOC = SLICE_X114Y108;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0_n/gen_data[6]..u_fifo_bit" LOC = SLICE_X114Y109;
@@ -1613,7 +2015,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQ, 31, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQ[31]" LOC = M26;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0/gen_data[7]..u_fifo_bit" LOC = SLICE_X112Y108;
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/data_path/data_read/gen_data[3].gen_data_ram.strobe0_n/gen_data[7]..u_fifo_bit" LOC = SLICE_X112Y109;
@@ -1621,7 +2022,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQS_Div_I_pin, 1, location in tile: 1
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQS_Div_I_pin" LOC = J22;
 
 ##############################################################################################################
@@ -1643,7 +2043,6 @@ INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy
 ##############################################################################################################
 ##  constraints for bit mpmc_0_DDR2_DQS_Div_O_pin, 1, location in tile: 0
 ##############################################################################################################
-#bank 1
 NET "mpmc_0_DDR2_DQS_Div_O_pin" LOC = J23;
 
 ##############################################################################################################
@@ -1652,35 +2051,3 @@ NET "mpmc_0_DDR2_DQS_Div_O_pin" LOC = J23;
 ##############################################################################################################
 INST "inst_microblaze_systems/mpmc_0/mpmc_0/mpmc_core_0/gen_s3_ddr2_phy.mpmc_phy_if_0/dqs_div/dqs_rst_ff" LOC = SLICE_X110Y136;
 ##############################################################################################################
-
-
-INST "inst_microblaze_systems/mpmc_0" AREA_GROUP = "pblock_inst_mcrblz_systms_mpmc_0";
-AREA_GROUP "pblock_inst_mcrblz_systms_mpmc_0" RANGE=SLICE_X72Y0:SLICE_X115Y207;
-AREA_GROUP "pblock_inst_mcrblz_systms_mpmc_0" RANGE=DSP48A_X3Y0:DSP48A_X4Y25;
-AREA_GROUP "pblock_inst_mcrblz_systms_mpmc_0" RANGE=RAMB16_X3Y0:RAMB16_X4Y25;
-
-
-#INST "inst_microblaze_systems/xps_sd_if_net_0" AREA_GROUP = "pblock_2";
-#AREA_GROUP "pblock_2" RANGE=SLICE_X24Y104:SLICE_X59Y139;
-#AREA_GROUP "pblock_2" RANGE=DSP48A_X1Y13:DSP48A_X2Y16;
-#AREA_GROUP "pblock_2" RANGE=RAMB16_X1Y13:RAMB16_X2Y16;
-
-
-###INST "inst_microblaze_systems/xps_ll_temac_0" AREA_GROUP = "pblock_2";
-###AREA_GROUP "pblock_2" RANGE=SLICE_X0Y207:SLICE_X59Y104;
-###AREA_GROUP "pblock_2" RANGE=DSP48A_X0Y25:DSP48A_X2Y13;
-###AREA_GROUP "pblock_2" RANGE=RAMB16_X0Y25:RAMB16_X2Y13;
-###INST "inst_microblaze_systems/xps_ll_temac_1" AREA_GROUP = "pblock_3";
-###AREA_GROUP "pblock_3" RANGE=SLICE_X0Y207:SLICE_X59Y104;
-###AREA_GROUP "pblock_3" RANGE=DSP48A_X0Y25:DSP48A_X2Y13;
-###AREA_GROUP "pblock_3" RANGE=RAMB16_X0Y25:RAMB16_X2Y13;
-
-
-#INST "inst_microblaze_systems/xps_ll_temac_0" AREA_GROUP = "pblock_2";
-#AREA_GROUP "pblock_2" RANGE=SLICE_X0Y48:SLICE_X115Y207;
-#AREA_GROUP "pblock_2" RANGE=DSP48A_X0Y6:DSP48A_X4Y25;
-#AREA_GROUP "pblock_2" RANGE=RAMB16_X0Y6:RAMB16_X4Y25;
-#INST "inst_microblaze_systems/xps_ll_temac_1" AREA_GROUP = "pblock_3";
-#AREA_GROUP "pblock_3" RANGE=SLICE_X0Y48:SLICE_X115Y207;
-#AREA_GROUP "pblock_3" RANGE=DSP48A_X0Y6:DSP48A_X4Y25;
-#AREA_GROUP "pblock_3" RANGE=RAMB16_X0Y6:RAMB16_X4Y25;

@@ -30,6 +30,8 @@ LockAddr: xps_sd_if_net_0,C_BASEADDR
 LockAddr: plbv46_pci_0,C_IPIFBAR_1
 LockAddr: plbv46_pci_0,C_IPIFBAR_0
 LockAddr: opb_ac97_controller_ref_0,C_BASEADDR
+LockAddr: xps_mch_emc_0d,C_MEM0_BASEADDR
+LockAddr: xps_epc_1,C_PRH0_BASEADDR
 Processor: microblaze_0
 ElfImp: 
 ElfSim: 
