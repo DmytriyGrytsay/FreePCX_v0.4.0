@@ -1,3 +1,10 @@
+########################################################
+### For build this project use next strategys files: ###
+### MapTimingExtraEffort							 ###
+### MapPhysSynthesis								 ###
+### MapTiming2										 ###
+########################################################
+
 #####################################
 ### Main options for this project ###
 #####################################
@@ -98,8 +105,10 @@ NET "rst" LOC = J7 | IOSTANDARD = LVCMOS33 | TIG;
 ######################
 ### SYSACE Signals ###
 ######################
+NET "sysace_clk" TNM_NET = "sys_sysace_clk";
+TIMESPEC TS_sys_sysace_clk = PERIOD "sys_sysace_clk" 37500 KHz HIGH 50 %;
 NET "sysace_clk" LOC = N6 | IOSTANDARD = LVCMOS33;
-NET "sysace_clk" PERIOD = 26000 ps;
+
 NET "sysace_ce" LOC = AE3 			| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
 NET "sysace_we" LOC = AF3 			| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
 NET "sysace_oe" LOC = AE4 			| IOSTANDARD = LVCMOS33 | DRIVE = 8 | SLEW = FAST;
@@ -240,8 +249,10 @@ NET "flash_busy" 		LOC = H18 | IOSTANDARD = LVCMOS25 | TIG;
 ##########################
 ### AC97 Codec Signals ###
 ##########################
-NET "ac97_clk" PERIOD = 80;
-NET "ac97_clk" 	LOC = N19	| IOSTANDARD = LVCMOS33;
+NET "ac97_clk" TNM_NET = "sys_ac97_clk";
+TIMESPEC TS_sys_ac97_clk = PERIOD "sys_ac97_clk" 14000 KHz HIGH 50 %;
+NET "ac97_clk" LOC = N19 | IOSTANDARD = LVCMOS18;
+
 NET "ac97_sync" 	LOC = B1		| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
 NET "ac97_reset" 	LOC = B2		| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
 NET "ac97_dout" 	LOC = D3		| IOSTANDARD = LVCMOS33 | DRIVE = 6 | SLEW = FAST;
@@ -837,11 +848,9 @@ NET "pci_int_d" IOSTANDARD = PCI33_3;
 #NET  "pci_p_clk0_r"	LOC = "ac2"		| IOSTANDARD = PCI33_3;
 #NET  "pci_p_clk1_r"	LOC = "ac3"		| IOSTANDARD = PCI33_3;
 
+NET "pci_clk" TNM_NET = "sys_pci_clk";
+TIMESPEC TS_sys_pci_clk = PERIOD "sys_pci_clk" 37500 KHz HIGH 50 %;
 NET "pci_clk" LOC = P3 | IOSTANDARD = LVCMOS33;
-#NET "pci_clk" TNM_NET = "sys_clk_pci_feedback";
-#TIMESPEC TS_sys_clk_pci_feedback = PERIOD "sys_clk_pci_feedback" 33 MHz HIGH 50 %;
-#NET "pci_clk" IOSTANDARD = LVCMOS33;
-NET "pci_clk" PERIOD = 30.000;
 
 NET "pci_clk_p[0]" LOC = H2 | IOSTANDARD = PCI33_3;
 NET "pci_clk_p[1]" LOC = M1 | IOSTANDARD = PCI33_3;
@@ -875,10 +884,14 @@ NET "fpga_0_Soft_TEMAC_MDC_0_pin" 				LOC = D6 	| IOSTANDARD = LVCMOS25;
 NET "fpga_0_Soft_TEMAC_TemacPhy_RST_n_pin" 	LOC = B7 	| IOSTANDARD = LVCMOS25;
 NET "fpga_0_Soft_TEMAC_MDIO_0" 					LOC = C7 	| IOSTANDARD = LVCMOS25;
 
-NET "fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin" 		LOC = AF14 	| IOSTANDARD = LVCMOS25;
-NET "fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin" 		LOC = AE14 	| IOSTANDARD = LVCMOS25;
-NET "fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin" PERIOD = 40.000 ;
-NET "fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin" PERIOD = 40.000 ;
+NET "fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin" TNM_NET = "sys_fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin";
+TIMESPEC TS_sys_fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin = PERIOD "sys_fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin" 25000 KHz HIGH 50 %;
+NET "fpga_0_Soft_TEMAC_MII_RX_CLK_0_pin" LOC = AF14 | IOSTANDARD = LVCMOS33;
+
+NET "fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin" TNM_NET = "sys_fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin";
+TIMESPEC TS_sys_fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin = PERIOD "sys_fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin" 25000 KHz HIGH 50 %;
+NET "fpga_0_Soft_TEMAC_MII_TX_CLK_0_pin" LOC = AE14 | IOSTANDARD = LVCMOS33;
+
 
 #######################
 ### 100M Ethernet 1 ###
@@ -899,10 +912,14 @@ NET "fpga_1_Soft_TEMAC_MDC_0_pin" 				LOC = F8 	| IOSTANDARD = LVCMOS25;
 NET "fpga_1_Soft_TEMAC_TemacPhy_RST_n_pin" 	LOC = G8 	| IOSTANDARD = LVCMOS25;
 NET "fpga_1_Soft_TEMAC_MDIO_0" 					LOC = A9 	| IOSTANDARD = LVCMOS25;
 
-NET "fpga_1_Soft_TEMAC_MII_TX_CLK_0_pin" 		LOC = AA14 	| IOSTANDARD = LVCMOS25;
-NET "fpga_1_Soft_TEMAC_MII_RX_CLK_0_pin" 		LOC = Y14 	| IOSTANDARD = LVCMOS25;
-NET "fpga_1_Soft_TEMAC_MII_RX_CLK_0_pin" PERIOD = 40.000 ;
-NET "fpga_1_Soft_TEMAC_MII_TX_CLK_0_pin" PERIOD = 40.000 ;
+NET "fpga_1_Soft_TEMAC_MII_RX_CLK_0_pin" TNM_NET = "sys_fpga_1_Soft_TEMAC_MII_RX_CLK_0_pin";
+TIMESPEC TS_sys_fpga_1_Soft_TEMAC_MII_RX_CLK_0_pin = PERIOD "sys_fpga_1_Soft_TEMAC_MII_RX_CLK_0_pin" 25000 KHz HIGH 50 %;
+NET "fpga_1_Soft_TEMAC_MII_RX_CLK_0_pin" LOC = Y14 | IOSTANDARD = LVCMOS33;
+
+NET "fpga_1_Soft_TEMAC_MII_TX_CLK_0_pin" TNM_NET = "sys_fpga_1_Soft_TEMAC_MII_TX_CLK_0_pin";
+TIMESPEC TS_sys_fpga_1_Soft_TEMAC_MII_TX_CLK_0_pin = PERIOD "sys_fpga_1_Soft_TEMAC_MII_TX_CLK_0_pin" 25000 KHz HIGH 50 %;
+NET "fpga_1_Soft_TEMAC_MII_TX_CLK_0_pin" LOC = AA14 | IOSTANDARD = LVCMOS33;
+
 
 NET "*/SPLB_Clk*"                  TNM_NET = "PLBCLK"; #name of signal connected to TEMAC SPLB_Clk input
 NET "*/LlinkTemac0_CLK*"           TNM_NET = "LLCLK0"; #name of signal connected to TEMAC LlinkTemac0_CLK input
